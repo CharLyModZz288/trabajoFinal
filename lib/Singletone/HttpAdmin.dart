@@ -1,0 +1,3 @@
+class HttpAdmin {
+  HttpAdmin();
+}
