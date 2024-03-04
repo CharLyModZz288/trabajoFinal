@@ -22,6 +22,9 @@ class LoginView extends StatelessWidget {
   void onClickRegistrar(){
     Navigator.of(_context).pushNamed("/registerview");
   }
+  void onClickRegistrarConMovil(){
+    Navigator.of(_context).pushNamed("/phoneloginview");
+  }
 
   void onClickAceptar() async {
 
@@ -100,6 +103,7 @@ class LoginView extends StatelessWidget {
                   children: [
                     CustomButton(onPressed: onClickAceptar, texto: 'Aceptar',),
                     CustomButton(onPressed: onClickRegistrar, texto: 'Registrarse',),
+                    CustomButton(onPressed: onClickRegistrarConMovil, texto: 'Registrarse con movil',),
                   ],
                 ),
 

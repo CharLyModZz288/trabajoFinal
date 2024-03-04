@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trabajofinal/Home/AjustesView.dart';
+import 'package:trabajofinal/onBoarding/PhoneLoginView.dart';
 import 'package:trabajofinal/splash/SplashView.dart';
 
 import 'Home/EditarPost.dart';
@@ -24,6 +25,7 @@ class Trabajofinal extends StatelessWidget{
       routes: {
         '/splashview':(context) => SplashView(),
         '/loginview':(context) => LoginView(),
+        '/phoneloginview':(context) => PhoneLoginView(),
         '/registerview':(context) => RegisterView(),
         '/perfilview':(context) => PerfilView(),
         '/homeview':(context) => HomeView(),

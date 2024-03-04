@@ -31,7 +31,7 @@ class FirebaseAdmin {
 
 
   Future<void> anadirUsuario(String nombre, int edad, String img) async {
-    FbUsuario usuario = new FbUsuario(nombre: nombre, edad: edad, shint: img);
+    FbUsuario usuario = new FbUsuario(nombre: nombre, edad: edad, shint: img,);
     String uidUsuario = FirebaseAuth.instance.currentUser!.uid;
     await db.collection("Usuarios").doc(uidUsuario).set(usuario.toFirestore());
   }
@@ -81,7 +81,7 @@ class FirebaseAdmin {
   }
 
   Future<void> updateUserData(String nombre, int edad, String imagen) async {
-    FbUsuario usuario = FbUsuario(nombre: nombre, edad: edad, shint: imagen);
+    FbUsuario usuario = FbUsuario(nombre: nombre, edad: edad, shint: imagen,);
     String uidUsuario = FirebaseAuth.instance.currentUser!.uid;
     await db.collection("Usuarios").doc(uidUsuario).set(usuario.toFirestore());
   }
