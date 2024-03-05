@@ -194,13 +194,13 @@ class _HomeViewState extends State<HomeView> {
   void fHomeViewDrawerOnTap(int indice) async {
     print("---->>>> " + indice.toString());
 
-    if (indice == 0) {
+    if (indice == 1) {
       FirebaseAuth.instance.signOut();
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (BuildContext context) => LoginView()),
         ModalRoute.withName('/loginview'),
       );
-    } else if (indice == 1) {
+    } else if (indice == 0) {
       Navigator.of(context).pushNamed(
         '/editarperfil',
         arguments: {},
@@ -208,7 +208,7 @@ class _HomeViewState extends State<HomeView> {
 
     }
 
-    else if (indice == 6) {
+    else if (indice == 3) {
       TextEditingController _searchController = TextEditingController();
 
       showDialog(
@@ -298,11 +298,11 @@ class _HomeViewState extends State<HomeView> {
         },
       );
     }
-    else if(indice == 3)
+    else if(indice == 2)
       {
         Navigator.of(context).pushNamed('/mapaview');
       }
-    else if(indice==7){
+    else if(indice==4){
       Navigator.of(context).pushNamed('/ajustesview');
 
     }

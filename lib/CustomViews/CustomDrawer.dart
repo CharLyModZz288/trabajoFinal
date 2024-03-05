@@ -40,33 +40,33 @@ class CustomDrawer extends StatelessWidget {
             selected: true,
             title: const Text('Perfil'),
             onTap: () {
-              onItemTap!(1);
+              onItemTap!(0);
             },
           ),
           ListTile(
             title: const Text('Cerrar Sesion'),
             onTap: () {
-              onItemTap!(0);
+              onItemTap!(1);
             },
           ),
 
           ListTile(
             title: const Text('Consultar Mapa'),
             onTap: () {
-              onItemTap!(3);
+              onItemTap!(2);
             },
           ),
 
           ListTile(
             title: const Text('Busqueda Titulo'),
             onTap: () {
-              onItemTap!(6);
+              onItemTap!(3);
             },
           ),
           ListTile(
             title: const Text('Ajustes'),
             onTap: () {
-              onItemTap!(7);
+              onItemTap!(4);
             },
           ),
         ],
