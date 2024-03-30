@@ -145,13 +145,17 @@ class _EditarPostState extends State<EditarPost> {
                             children: [
                               TextField(
                                 onChanged: (value) {
-                                  titulo = value;
+                                  setState(() {
+                                    titulo = value;
+                                  });
                                 },
                                 decoration: InputDecoration(labelText: 'Nuevo Título'),
                               ),
                               TextField(
                                 onChanged: (value) {
-                                  postContenido = value;
+                                  setState(() {
+                                    postContenido = value;
+                                  });
                                 },
                                 decoration: InputDecoration(labelText: 'Nuevo Contenido'),
                               ),
@@ -172,9 +176,17 @@ class _EditarPostState extends State<EditarPost> {
                           actions: [
                             ElevatedButton(
                               onPressed: () {
+                                // Actualizar los datos en Firebase
+                                conexion.fbadmin.updatePostData(
+                                  titulo,
+                                  postContenido,
+                                  imagenUrl,
+                                  widget.usuario.toString(),
+                                  widget.postId.toString(),
+                                );
+                                // Cerrar el diálogo
                                 Navigator.of(context).pop();
-                                conexion.fbadmin.updatePostData(titulo, postContenido, imagenUrl, widget.usuario.toString(), widget.postId.toString());
-                                print( imagenUrl);
+                                // Actualizar el estado para reflejar los cambios
                                 setState(() {});
                               },
                               child: Text('Guardar Cambios'),
@@ -186,6 +198,7 @@ class _EditarPostState extends State<EditarPost> {
                   },
                   child: Text('Modificar Datos del Post'),
                 ),
+
               ],
             ),
           ],
