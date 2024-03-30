@@ -12,10 +12,10 @@ import '../Singletone/DataHolder.dart';
 
 class Editarperfil extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _EditarperfilState createState() => _EditarperfilState();
 }
 
-class _HomeScreenState extends State<Editarperfil> {
+class _EditarperfilState extends State<Editarperfil> {
   FirebaseFirestore db = FirebaseFirestore.instance;
   late FbUsuario usuario;
   DataHolder conexion = DataHolder();
@@ -34,10 +34,12 @@ class _HomeScreenState extends State<Editarperfil> {
 
   Future<void> cargarUsuario() async {
     usuario = await conexion.fbadmin.conseguirUsuario();
-    print(usuario.shint.toString());
-    print(usuario.nombre.toString());
-    print(usuario.edad.toString());
-    setState(() {});
+    setState(() {
+      // Asignar los valores del usuario cargado a las variables locales
+      nombre = usuario.nombre;
+      edad = usuario.edad;
+
+    });
   }
 
   Future<void> updateImage() async {
@@ -60,17 +62,13 @@ class _HomeScreenState extends State<Editarperfil> {
 
   Future<String> setearUrlImagen() async {
     final storageRef = FirebaseStorage.instance.ref();
-    print("la ruta guardada en el usuario es: " + usuario.shint.toString());
-
     String rutaEnNube =
         "usuarios/" + FirebaseAuth.instance.currentUser!.uid + "/imgs/" +
             DateTime
                 .now()
                 .millisecondsSinceEpoch
                 .toString() + ".jpg";
-
     final rutaAFicheroEnNube = storageRef.child(rutaEnNube);
-
     final metadata = SettableMetadata(contentType: "image/jpeg");
     try {
       await rutaAFicheroEnNube.putFile(_imagePreview, metadata);
@@ -142,20 +140,27 @@ class _HomeScreenState extends State<Editarperfil> {
                               // Permite al usuario seleccionar una imagen desde la cámara
                               await updateImageCamera();
                             },
-                            child: Text('Camara'),
+                            child: Text('Cámara'),
                           ),
                         ],
                       ),
                       actions: [
                         ElevatedButton(
                           onPressed: () async {
-                            // Cerrar el cuadro de diálogo y actualizar los datos en Firestore
+                            // Cerrar el cuadro de diálogo
                             Navigator.of(context).pop();
                             if (_imagePreview.existsSync()) {
+                              // Actualizar la imagen si se ha seleccionado una nueva
                               imagen = await setearUrlImagen();
                             }
-                            conexion.fbadmin.updateUserData(
-                                nombre, edad, imagen);
+                            // Actualizar los datos en Firestore
+                            await conexion.fbadmin.updateUserData(
+                                nombre,
+                                edad,
+                                imagen
+                            );
+                            // Recargar la información del usuario para reflejar los cambios
+                            await cargarUsuario();
                             setState(() {});
                           },
                           child: Text('Guardar Cambios'),
