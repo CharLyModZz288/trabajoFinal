@@ -159,7 +159,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(title: Text("TrabajoFinal"),
+      appBar: AppBar(title: Text("Publicaciones"),
         shadowColor: Colors.yellowAccent, // Color de sombra del AppBar
         backgroundColor: Colors.purpleAccent,),
       backgroundColor: Colors.grey[200],// Color de fondo del AppBar
@@ -303,6 +303,18 @@ class _HomeViewState extends State<HomeView> {
         Navigator.of(context).pushNamed('/mapaview');
       }
     else if(indice==4){
+      Navigator.of(context).pushNamed('/ajustesview');
+
+    }
+    else if(indice==5){
+      Navigator.of(context).pushNamed('/ajustesview');
+
+    }
+    else if(indice==6){
+      Navigator.of(context).pushNamed('/ajustesview');
+
+    }
+    else if(indice==7){
       Navigator.of(context).pushNamed('/ajustesview');
 
     }

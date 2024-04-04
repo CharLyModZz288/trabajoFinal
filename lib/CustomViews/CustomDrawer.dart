@@ -64,9 +64,27 @@ class CustomDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text('Ajustes'),
+            title: const Text('Youtubers'),
             onTap: () {
               onItemTap!(4);
+            },
+          ),
+          ListTile(
+            title: const Text('Streamers'),
+            onTap: () {
+              onItemTap!(5);
+            },
+          ),
+          ListTile(
+            title: const Text('Influencers'),
+            onTap: () {
+              onItemTap!(6);
+            },
+          ),
+          ListTile(
+            title: const Text('Ajustes'),
+            onTap: () {
+              onItemTap!(7);
             },
           ),
         ],
