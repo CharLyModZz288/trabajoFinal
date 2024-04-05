@@ -45,8 +45,8 @@ class _SplashViewState extends State<SplashView>{
 
       if (usuario != null) {
 
-          Navigator.of(context).popAndPushNamed("/homeview");
-        }
+        Navigator.of(context).popAndPushNamed("/homeview");
+      }
 
       else{
 
@@ -72,7 +72,7 @@ class _SplashViewState extends State<SplashView>{
             top: DataHolder().platformAdmin.getScreenHeight()*0.1,
             width: DataHolder().platformAdmin.getScreenWidth()*0.8,
             height: DataHolder().platformAdmin.getScreenHeight()*0.8,
-            child: Image.asset("Resources/descarga.jpeg",)
+            child: Image.asset("Resources/Museo.png",)
         ),
         Positioned(
             left: DataHolder().platformAdmin.getScreenWidth()*0.1,
@@ -82,5 +82,5 @@ class _SplashViewState extends State<SplashView>{
 
       ],
     );
-}
+  }
 }
