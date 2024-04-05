@@ -159,7 +159,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(title: Text("Publicaciones"),
+      appBar: AppBar(title: Text("TrabajoFinal"),
         shadowColor: Colors.yellowAccent, // Color de sombra del AppBar
         backgroundColor: Colors.purpleAccent,),
       backgroundColor: Colors.grey[200],// Color de fondo del AppBar
@@ -299,24 +299,14 @@ class _HomeViewState extends State<HomeView> {
       );
     }
     else if(indice == 2)
-      {
-        Navigator.of(context).pushNamed('/mapaview');
-      }
+    {
+      Navigator.of(context).pushNamed('/mapaview');
+    }
     else if(indice==4){
       Navigator.of(context).pushNamed('/ajustesview');
-
     }
     else if(indice==5){
-      Navigator.of(context).pushNamed('/ajustesview');
-
-    }
-    else if(indice==6){
-      Navigator.of(context).pushNamed('/ajustesview');
-
-    }
-    else if(indice==7){
-      Navigator.of(context).pushNamed('/ajustesview');
-
+      Navigator.of(context).pushNamed('/homeview2');
     }
   }
 
@@ -324,13 +314,13 @@ class _HomeViewState extends State<HomeView> {
   Widget? creadorDeItemLista(BuildContext context, int index) {
     return CustomCellView(sTexto: recorrerDiccionario(miDiccionario) + " " +
         posts[index].post,
-        iCodigoColor: 50,
-        dFuenteTamanyo: 20,
-        iPosicion: index,
-        imagen: posts[index].sUrlImg,
-        onItemListClickedFun:onItemListClicked,
-        tituloPost:  posts[index].titulo,
-        usuario: posts[index].usuario, idPost: posts[index].id, contenido: posts[index].post,);
+      iCodigoColor: 50,
+      dFuenteTamanyo: 20,
+      iPosicion: index,
+      imagen: posts[index].sUrlImg,
+      onItemListClickedFun:onItemListClicked,
+      tituloPost:  posts[index].titulo,
+      usuario: posts[index].usuario, idPost: posts[index].id, contenido: posts[index].post,);
   }
 
 
