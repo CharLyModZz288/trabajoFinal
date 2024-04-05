@@ -17,12 +17,12 @@ import 'package:image_picker/image_picker.dart';
 
 
 
-class PostCreateView extends StatefulWidget{
+class PostCreateView2 extends StatefulWidget{
   @override
-  State<PostCreateView> createState() => _PostCreateViewState();
+  State<PostCreateView2> createState() => _PostCreateViewState();
 }
 
-class _PostCreateViewState extends State<PostCreateView> {
+class _PostCreateViewState extends State<PostCreateView2> {
 
   FirebaseFirestore db = FirebaseFirestore.instance;
   TextEditingController tecTitulo=TextEditingController();
@@ -76,13 +76,12 @@ class _PostCreateViewState extends State<PostCreateView> {
 
     final rutaAFicheroEnNube = storageRef.child(rutaEnNube);
 
-    final metadata = SettableMetadata(contentType: "logo/jpeg");
+    final metadata = SettableMetadata(contentType: "image/jpeg");
     try {
       await rutaAFicheroEnNube.putFile(_imagePreview, metadata);
 
       print("SE HA SUBIDO LA IMAGEN");
-      Navigator.of(context).popAndPushNamed("/homeview");
-
+      Navigator.of(context).popAndPushNamed("/homeview2");
       // Obtén la URL de la imagen después de subirla
       String url = await rutaAFicheroEnNube.getDownloadURL();
       print("URL de la imagen: $url");
@@ -109,7 +108,7 @@ class _PostCreateViewState extends State<PostCreateView> {
     );
 
     CollectionReference<FbPostId> postsRef = db
-        .collection("PostUsuario")
+        .collection("Youtubers")
         .withConverter(
       fromFirestore: FbPostId.fromFirestore,
       toFirestore: (FbPostId post, _) => post.toFirestore(),
