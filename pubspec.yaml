@@ -71,6 +71,7 @@ flutter:
   assets:
     - Resources/descarga.jpeg
     - Resources/logo.jpeg
+    - Resources/Museo.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
