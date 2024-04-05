@@ -12,6 +12,6 @@ void main() async{
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  Trabajofinal trabajofinal=Trabajofinal();
-  runApp(trabajofinal);
+  MuseoYismer museoYismer=MuseoYismer();
+  runApp(museoYismer);
 }
