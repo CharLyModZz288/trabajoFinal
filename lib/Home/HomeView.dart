@@ -308,6 +308,12 @@ class _HomeViewState extends State<HomeView> {
     else if(indice==5){
       Navigator.of(context).pushNamed('/homeview2');
     }
+    else if(indice==6){
+      Navigator.of(context).pushNamed('/homeview3');
+    }
+    else if(indice==7){
+      Navigator.of(context).pushNamed('/homeview4');
+    }
   }
 
 
