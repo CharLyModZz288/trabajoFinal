@@ -27,11 +27,7 @@ class CustomDrawer extends StatelessWidget {
                   width: 100,
                   height: 100,
                 ),
-                Text(
-                  "Selecciona lo que desees",
-                  style: TextStyle(color: Colors.red,
-                      fontSize: 20),
-                ),
+
               ],
             ),
           ),
