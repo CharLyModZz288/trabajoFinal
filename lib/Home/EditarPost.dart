@@ -15,14 +15,18 @@ class EditarPost extends StatefulWidget {
   String? postId;
   String? usuario;
   String? imagen;
+  final String? tituloInicial; // Agregado
+  final String? contenidoInicial; // Agregado
 
-  EditarPost({this.postId, this.usuario, this.imagen});
+  EditarPost({this.postId, this.usuario, this.imagen,this.tituloInicial,this.contenidoInicial});
 
   @override
   _EditarPostState createState() => _EditarPostState();
 }
 
 class _EditarPostState extends State<EditarPost> {
+  TextEditingController _tituloController = TextEditingController(); // Agregado
+  TextEditingController _contenidoController = TextEditingController(); // Agregado
   ImagePicker _picker = ImagePicker();
   FirebaseFirestore db = FirebaseFirestore.instance;
   File _imagePreview = File("");
@@ -35,6 +39,13 @@ class _EditarPostState extends State<EditarPost> {
   DataHolder conexion = DataHolder();
   bool _isDisposed = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _tituloController.text = widget.tituloInicial ?? ''; // Agregado
+    _contenidoController.text = widget.contenidoInicial ?? ''; // Agregado
+    imagenUrl = widget.imagen ?? ""; // Agregado
+  }
   @override
   void dispose() {
     _isDisposed = true;
@@ -134,7 +145,7 @@ class _EditarPostState extends State<EditarPost> {
             Row(
               children: [
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: ()  {
                     // Mostrar un cuadro de diálogo para que el usuario ingrese nuevos datos
                     showDialog(
                       context: context,
