@@ -72,6 +72,15 @@ flutter:
     - Resources/descarga.jpeg
     - Resources/logo.jpeg
     - Resources/Museo.png
+    - Resources/youtube.png
+    - Resources/tik tok.png
+    - Resources/ajustes.png
+    - Resources/busqueda.jfif
+    - Resources/logout.jfif
+    - Resources/maps.jfif
+    - Resources/perfil.jfif
+    - Resources/twitch.jfif
+    - Resources/inicio.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
