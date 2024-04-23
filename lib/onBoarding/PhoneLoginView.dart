@@ -64,6 +64,11 @@ class _PhoneLoginViewState extends State<PhoneLoginView> {
       Navigator.of(context).popAndPushNamed("/perfilview");
     }
   }
+  void onClickCancelar(){
+
+    Navigator.of(context).pushNamed("/loginview");
+
+  }
 
   void verificacionFallida(FirebaseAuthException excepcion){
     if (excepcion.code == 'invalid-phone-number') {
@@ -95,7 +100,8 @@ class _PhoneLoginViewState extends State<PhoneLoginView> {
           if(blMostrarVerificacion)
             CustomPhoneTextField(sHint: "Numero Verificacion",tecController: tecVerify),
           if(blMostrarVerificacion)
-            TextButton(onPressed: enviarVerifyPressed, child: Text("Enviar"))
+            TextButton(onPressed: enviarVerifyPressed, child: Text("Enviar")),
+            TextButton(onPressed: onClickCancelar, child: Text("Cancelar")),
         ],
 
       ),
