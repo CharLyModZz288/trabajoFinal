@@ -27,52 +27,83 @@ class CustomDrawer2 extends StatelessWidget {
                   width: 100,
                   height: 100,
                 ),
-                Text(
-                  "Selecciona lo que desees",
-                  style: TextStyle(color: Colors.red,
-                      fontSize: 20),
-                ),
+                //Text(
+                  //"Selecciona lo que desees",
+                  //style: TextStyle(color: Colors.red,
+                    //  fontSize: 20),
+                //),
               ],
             ),
           ),
           ListTile(
-            selectedColor: Colors.yellow,
-            selected: true,
+            leading: Image.asset(
+              'Resources/perfil.jfif',
+              width: 24.0,
+              height: 24.0,
+            ),
             title: const Text('Perfil'),
             onTap: () {
               onItemTap!(0);
             },
           ),
           ListTile(
-            title: const Text('Cerrar Sesion'),
+            leading: Image.asset(
+              'Resources/inicio.png',
+              width: 24.0,
+              height: 24.0,
+            ),
+            title: const Text('Inicio'),
             onTap: () {
-              onItemTap!(1);
+              onItemTap!(5);
             },
           ),
 
           ListTile(
-            title: const Text('Consultar Mapa'),
+            leading: Image.asset(
+              'Resources/maps.jfif',
+              width: 24.0,
+              height: 24.0,
+            ),
+            title: const Text('Ver Ubicacion del Museo'),
             onTap: () {
               onItemTap!(2);
             },
           ),
 
           ListTile(
-            title: const Text('Busqueda Titulo'),
+            leading: Image.asset(
+              'Resources/busqueda.jfif',
+              width: 24.0,
+              height: 24.0,
+            ),
+            title: const Text('Busqueda de Publicación por Titulo'),
             onTap: () {
               onItemTap!(3);
             },
           ),
+
           ListTile(
+            leading: Image.asset(
+              'Resources/ajustes.png',
+              width: 24.0,
+              height: 24.0,
+            ),
             title: const Text('Ajustes'),
             onTap: () {
               onItemTap!(4);
             },
           ),
           ListTile(
-            title: const Text('Inicio'),
+            leading: Image.asset(
+              'Resources/logout.jfif',
+              width: 24.0,
+              height: 24.0,
+            ),
+            selectedColor: Colors.red,
+            selected: true,
+            title: const Text('Cerrar Sesion'),
             onTap: () {
-              onItemTap!(5);
+              onItemTap!(1);
             },
           ),
         ],

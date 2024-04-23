@@ -32,55 +32,96 @@ class CustomDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            selectedColor: Colors.yellow,
-            selected: true,
+            leading: Image.asset(
+              'Resources/perfil.jfif',
+              width: 24.0,
+              height: 24.0,
+            ),
             title: const Text('Perfil'),
             onTap: () {
               onItemTap!(0);
             },
           ),
           ListTile(
-            title: const Text('Cerrar Sesion'),
-            onTap: () {
-              onItemTap!(1);
-            },
-          ),
-
-          ListTile(
-            title: const Text('Consultar Mapa'),
-            onTap: () {
-              onItemTap!(2);
-            },
-          ),
-
-          ListTile(
-            title: const Text('Busqueda Titulo'),
-            onTap: () {
-              onItemTap!(3);
-            },
-          ),
-          ListTile(
-            title: const Text('Ajustes'),
-            onTap: () {
-              onItemTap!(4);
-            },
-          ),
-          ListTile(
+            leading: Image.asset(
+              'Resources/youtube.png',
+              width: 24.0,
+              height: 24.0,
+            ),
             title: const Text('Youtubers'),
             onTap: () {
               onItemTap!(5);
             },
           ),
           ListTile(
+            leading: Image.asset(
+              'Resources/tik tok.png',
+              width: 24.0,
+              height: 24.0,
+            ),
             title: const Text('Influencers'),
             onTap: () {
               onItemTap!(6);
             },
           ),
           ListTile(
+            leading: Image.asset(
+              'Resources/twitch.jfif',
+              width: 24.0,
+              height: 24.0,
+            ),
             title: const Text('Streamers'),
             onTap: () {
               onItemTap!(7);
+            },
+          ),
+
+
+          ListTile(
+            leading: Image.asset(
+              'Resources/maps.jfif',
+              width: 24.0,
+              height: 24.0,
+            ),
+            title: const Text('Ver Ubicacion del Museo'),
+            onTap: () {
+              onItemTap!(2);
+            },
+          ),
+
+          ListTile(
+            leading: Image.asset(
+              'Resources/busqueda.jfif',
+              width: 24.0,
+              height: 24.0,
+            ),
+            title: const Text('Busqueda de Publicación por Titulo'),
+            onTap: () {
+              onItemTap!(3);
+            },
+          ),
+          ListTile(
+            leading: Image.asset(
+              'Resources/ajustes.png',
+              width: 24.0,
+              height: 24.0,
+            ),
+            title: const Text('Ajustes'),
+            onTap: () {
+              onItemTap!(4);
+            },
+          ),
+          ListTile(
+            leading: Image.asset(
+              'Resources/logout.jfif',
+              width: 24.0,
+              height: 24.0,
+            ),
+            selectedColor: Colors.red,
+            selected: true,
+            title: const Text('Cerrar Sesion'),
+            onTap: () {
+              onItemTap!(1);
             },
           ),
         ],
