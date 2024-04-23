@@ -88,7 +88,7 @@ class LoginView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
 
               children: [
-                Text("Bienvenido al Trabajo de Carlos", style: TextStyle(fontSize: 25)),
+                Text("Bienvenido al Museo Yismer", style: TextStyle(fontSize: 25)),
 
                 Padding(padding: EdgeInsets.symmetric(horizontal: 60, vertical: 16),
                     child:  customTextField(tecUsername: usuarioControlador, oscuro: false, sHint: "Usuario",)

@@ -159,7 +159,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(title: Text("TrabajoFinal"),
+      appBar: AppBar(title: Text("Publicaciones"),
         shadowColor: Colors.yellowAccent, // Color de sombra del AppBar
         backgroundColor: Colors.purpleAccent,),
       backgroundColor: Colors.grey[200],// Color de fondo del AppBar
