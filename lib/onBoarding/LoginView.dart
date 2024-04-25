@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +6,6 @@ import '../CustomViews/CustomButton.dart';
 import '../CustomViews/CustomDialog.dart';
 import '../CustomViews/CustomTextField.dart';
 import '../Singletone/DataHolder.dart';
-
 
 class LoginView extends StatelessWidget {
 
@@ -28,37 +25,36 @@ class LoginView extends StatelessWidget {
 
   void onClickAceptar() async {
 
+    if (usuarioControlador.text.isEmpty || usuarioPassword.text.isEmpty) {
+      CustomDialog.show(_context, "No está todo relleno, compruébalo");
+      return;
+    }
+
+    try {
+      // Inicia sesión con las credenciales
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: usuarioControlador.text,
           password: usuarioPassword.text
       );
-    if (usuarioControlador.text.isEmpty || usuarioPassword.text.isEmpty) {
-      CustomDialog.show(_context, "No esta todo relleno, compruébalo");
-    } else {
-      try {
 
+      if (credential.user?.email == 'administrador@administrador.com') {
+        Navigator.of(_context).popAndPushNamed("/homeadmin");
+      } else {
         if (await conexion.fbadmin.existenDatos()){
           Navigator.of(_context).popAndPushNamed("/homeview");
-
-        }
-
-        else{
+        } else {
           Navigator.of(_context).popAndPushNamed("/perfilview");
         }
+      }
 
-      } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e) {
+      // Maneja los errores de autenticación
+      CustomDialog.show(_context, "Usuario o contraseña incorrectos");
 
-        CustomDialog.show(_context, "Usuario o contraseña incorrectos");
-
-        if (e.code == 'user-not-found') {
-
-          CustomDialog.show(_context, "El usuario no existe");
-
-        } else if (e.code == 'wrong-password') {
-
-          CustomDialog.show(_context, "contraseña incorrecta");
-
-        }
+      if (e.code == 'user-not-found') {
+        CustomDialog.show(_context, "El usuario no existe");
+      } else if (e.code == 'wrong-password') {
+        CustomDialog.show(_context, "Contraseña incorrecta");
       }
     }
   }
@@ -66,8 +62,7 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _context = context;
-    // TODO: implement build
-
+    // Construcción de la vista
     return Scaffold(
         appBar: AppBar(
           title: const Text('Login'),
@@ -86,30 +81,35 @@ class LoginView extends StatelessWidget {
           ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-
               children: [
                 Text("Bienvenido al Museo Yismer", style: TextStyle(fontSize: 25)),
-
-                Padding(padding: EdgeInsets.symmetric(horizontal: 60, vertical: 16),
-                    child:  customTextField(tecUsername: usuarioControlador, oscuro: false, sHint: "Usuario",)
+                Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 60, vertical: 16),
+                    child: customTextField(
+                      tecUsername: usuarioControlador,
+                      oscuro: false,
+                      sHint: "Usuario",
+                    )
                 ),
-
-                Padding(padding: EdgeInsets.symmetric(horizontal: 60, vertical: 16),
-                    child:  customTextField(tecUsername: usuarioPassword, oscuro: true, sHint: "Contraseña",)
+                Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 60, vertical: 16),
+                    child: customTextField(
+                      tecUsername: usuarioPassword,
+                      oscuro: true,
+                      sHint: "Contraseña",
+                    )
                 ),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CustomButton(onPressed: onClickAceptar, texto: 'Aceptar',),
                     CustomButton(onPressed: onClickRegistrar, texto: 'Registrarse',),
-                    CustomButton(onPressed: onClickRegistrarConMovil, texto: 'Registrarse con movil',),
+                    CustomButton(onPressed: onClickRegistrarConMovil, texto: 'Registrarse con móvil',),
                   ],
                 ),
-
               ],
-            ),),
-        )
-    );
+            ),
+          ),
+        ));
   }
 }
