@@ -36,6 +36,7 @@ class MuseoYismer extends StatelessWidget{
         '/registerview':(context) => RegisterView(),
         '/perfilview':(context) => PerfilView(),
         '/homeview':(context) => HomeView(),
+        '/homeadmin':(context) => HomeAdmin(),
         '/homeview2':(context) => HomeView2(),
         '/homeview3':(context) => HomeView3(),
         '/homeview4':(context) => HomeView4(),
