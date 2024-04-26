@@ -20,15 +20,15 @@ import '../FirebaseObjects/FbUsuario.dart';
 import '../Singletone/DataHolder.dart';
 import '../onBoarding/LoginView.dart';
 
-class YoutubersAdmin extends StatefulWidget{
+class StreamersAdmin extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _YoutubersAdminState();
+    return _StreamersAdminState();
   }
 }
 
-class _YoutubersAdminState extends State<YoutubersAdmin> {
+class _StreamersAdminState extends State<StreamersAdmin> {
 
 
   TextEditingController bdUsuarioNombre = TextEditingController();
@@ -69,7 +69,7 @@ class _YoutubersAdminState extends State<YoutubersAdmin> {
 
     posts.clear();
 
-    CollectionReference<FbPostId> postsRef = db.collection("Youtubers")
+    CollectionReference<FbPostId> postsRef = db.collection("Streamers")
         .withConverter(
       fromFirestore: FbPostId.fromFirestore,
       toFirestore: (FbPostId post, _) => post.toFirestore(),);
@@ -162,7 +162,7 @@ class _YoutubersAdminState extends State<YoutubersAdmin> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(title: Text("Youtubers"),
+      appBar: AppBar(title: Text("Streamers"),
         shadowColor: Colors.yellowAccent, // Color de sombra del AppBar
         backgroundColor: Colors.purpleAccent,),
       backgroundColor: Colors.grey[200],// Color de fondo del AppBar
@@ -174,7 +174,7 @@ class _YoutubersAdminState extends State<YoutubersAdmin> {
       drawer: CustomDrawerAdmin2(onItemTap: fHomeViewDrawerOnTap, imagen: perfil.shint,),
       floatingActionButton:FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).pushNamed("/postcreateview2");
+          Navigator.of(context).pushNamed("/postcreateview4");
         },
         child: Icon(Icons.add),
       ),
