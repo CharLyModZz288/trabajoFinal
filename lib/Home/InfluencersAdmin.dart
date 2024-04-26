@@ -13,6 +13,7 @@ import '../CustomViews/CustomButton.dart';
 import '../CustomViews/CustomCellView.dart';
 import '../CustomViews/CustomDrawer.dart';
 import '../CustomViews/CustomDrawer2.dart';
+import '../CustomViews/CustomDrawerAdmin2.dart';
 import '../CustomViews/CustomGredCellView.dart';
 import '../FirebaseObjects/FbPostId.dart';
 import '../FirebaseObjects/FbUsuario.dart';
@@ -170,7 +171,7 @@ class _InfluencersAdminState extends State<InfluencersAdmin> {
         child: celdasOLista(bIsList),
       ),
       bottomNavigationBar: CustomButton(onBotonesClicked: this.onBottonMenuPressed, texto: 'Navegar',),
-      drawer: CustomDrawerAdmin(onItemTap: fHomeViewDrawerOnTap, imagen: perfil.shint,),
+      drawer: CustomDrawerAdmin2(onItemTap: fHomeViewDrawerOnTap, imagen: perfil.shint,),
       floatingActionButton:FloatingActionButton(
         onPressed: () {
           Navigator.of(context).pushNamed("/postcreateview3");
@@ -309,7 +310,7 @@ class _InfluencersAdminState extends State<InfluencersAdmin> {
 
     }
     else if(indice==5){
-      Navigator.of(context).pushNamed('/homeview');
+      Navigator.of(context).pushNamed('/homeadmin');
 
     }
   }
