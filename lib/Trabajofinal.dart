@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:trabajofinal/Home/AjustesView.dart';
 import 'package:trabajofinal/Home/HomeAdmin.dart';
 import 'package:trabajofinal/Home/HomeView2.dart';
-import 'package:trabajofinal/Home/InfluencersAdmin.dart';
+import 'package:trabajofinal/Home/StreamersAdmin.dart';
 import 'package:trabajofinal/Home/YoutubersAdmin.dart';
 import 'package:trabajofinal/onBoarding/PhoneLoginView.dart';
 import 'package:trabajofinal/splash/SplashView.dart';
@@ -14,6 +14,7 @@ import 'Home/Editarperfil.dart';
 import 'Home/HomeView.dart';
 import 'Home/HomeView3.dart';
 import 'Home/HomeView4.dart';
+import 'Home/InfluencersAdmin.dart';
 import 'Home/MapaView.dart';
 import 'Home/PostCreateView.dart';
 import 'Home/PostCreateView2.dart';
@@ -40,6 +41,7 @@ class MuseoYismer extends StatelessWidget{
         '/homeadmin':(context) => HomeAdmin(),
         '/youtubersadmin':(context) => YoutubersAdmin(),
         '/influencersadmin':(context) => InfluencersAdmin(),
+        '/streamersadmin':(context) => StreamersAdmin(),
         '/homeview':(context) => HomeView(),
         '/homeview2':(context) => HomeView2(),
         '/homeview3':(context) => HomeView3(),
