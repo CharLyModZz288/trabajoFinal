@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:trabajofinal/CustomViews/CustomDrawerAdmin.dart';
 
 import '../CustomViews/CustomButton.dart';
 import '../CustomViews/CustomCellView.dart';
@@ -168,7 +169,7 @@ class _HomeAdminState extends State<HomeAdmin> {
         child: celdasOLista(bIsList),
       ),
       bottomNavigationBar: CustomButton(onBotonesClicked: this.onBottonMenuPressed, texto: 'Navegar',),
-      drawer: CustomDrawer(onItemTap: fHomeViewDrawerOnTap, imagen: perfil.shint,),
+      drawer: CustomDrawerAdmin(onItemTap: fHomeViewDrawerOnTap, imagen: perfil.shint,),
       floatingActionButton:FloatingActionButton(
         onPressed: () {
           Navigator.of(context).pushNamed("/postcreateview");
@@ -207,10 +208,10 @@ class _HomeAdminState extends State<HomeAdmin> {
       );
     }
     else if(indice==5){
-      Navigator.of(context).pushNamed('/homeview2');
+      Navigator.of(context).pushNamed('/youtubersadmin');
     }
     else if(indice==6){
-      Navigator.of(context).pushNamed('/homeview3');
+      Navigator.of(context).pushNamed('/influencersadmin');
     }
     else if(indice==7){
       Navigator.of(context).pushNamed('/homeview4');

@@ -170,13 +170,6 @@ class _HomeView2State extends State<HomeView2> {
       ),
       bottomNavigationBar: CustomButton(onBotonesClicked: this.onBottonMenuPressed, texto: 'Navegar',),
       drawer: CustomDrawer2(onItemTap: fHomeViewDrawerOnTap, imagen: perfil.shint,),
-      floatingActionButton:FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed("/postcreateview2");
-        },
-        child: Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
       /**/
     );
   }
