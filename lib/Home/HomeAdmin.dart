@@ -214,7 +214,7 @@ class _HomeAdminState extends State<HomeAdmin> {
       Navigator.of(context).pushNamed('/influencersadmin');
     }
     else if(indice==7){
-      Navigator.of(context).pushNamed('/homeview4');
+      Navigator.of(context).pushNamed('/streamersadmin');
     }
   }
 
