@@ -169,7 +169,7 @@ class _HomeView4State extends State<HomeView4> {
         child: celdasOLista(bIsList),
       ),
       bottomNavigationBar: CustomButton(onBotonesClicked: this.onBottonMenuPressed, texto: 'Navegar',),
-      drawer: CustomDrawer(onItemTap: fHomeViewDrawerOnTap, imagen: perfil.shint,),
+      drawer: CustomDrawer2(onItemTap: fHomeViewDrawerOnTap, imagen: perfil.shint,),
       /**/
     );
   }
