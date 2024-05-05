@@ -161,9 +161,8 @@ class _HomeView3State extends State<HomeView3> {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(title: Text("Influencers"),
-        shadowColor: Colors.yellowAccent, // Color de sombra del AppBar
-        backgroundColor: Colors.purpleAccent,),
-      backgroundColor: Colors.grey[200],// Color de fondo del AppBar
+        backgroundColor: Colors.azultrabajo,),
+      backgroundColor: Colors.grey[400],// Color de fondo del AppBar
       body: Center(
 
         child: celdasOLista(bIsList),

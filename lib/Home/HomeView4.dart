@@ -161,9 +161,8 @@ class _HomeView4State extends State<HomeView4> {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(title: Text("Streamers"),
-        shadowColor: Colors.yellowAccent, // Color de sombra del AppBar
-        backgroundColor: Colors.purpleAccent,),
-      backgroundColor: Colors.grey[200],// Color de fondo del AppBar
+        backgroundColor: Colors.violetatrabajo,),
+      backgroundColor: Colors.grey[400],// Color de fondo del AppBar
       body: Center(
 
         child: celdasOLista(bIsList),
