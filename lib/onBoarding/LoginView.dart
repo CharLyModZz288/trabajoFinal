@@ -67,10 +67,9 @@ class LoginView extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Login'),
           centerTitle: true,
-          shadowColor: Colors.purpleAccent,
-          backgroundColor: Colors.pink,
+          backgroundColor: Colors.amarillotrabajo,
         ),
-        backgroundColor: Colors.blue[200],
+        backgroundColor: Colors.grey[400],
         body:
         Center(
           child: ConstrainedBox(constraints: BoxConstraints(

@@ -9,7 +9,7 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      width: MediaQuery.of(context).size.width * 0.5, // Ajusta este valor para controlar el ancho
+      width: MediaQuery.of(context).size.width * 0.7, // Ajusta este valor para controlar el ancho
       child: ListView(
         padding: EdgeInsets.zero,
         children: [

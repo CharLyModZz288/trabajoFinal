@@ -46,7 +46,7 @@ class CustomGredCellView extends StatelessWidget{
             );
           },
           child: Container(
-            color: Colors.orangeAccent, // Cambié el color a beige
+            color: Colors.naranjatrabajo, // Cambié el color a beige
             child: Stack(
               children: [
                 if (imagen.isNotEmpty) ...[
