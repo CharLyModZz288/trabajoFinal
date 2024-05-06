@@ -163,8 +163,8 @@ class _InfluencersAdminState extends State<InfluencersAdmin> {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(title: Text("Influencers"),
-        backgroundColor: Colors.azultrabajo,),
-      backgroundColor: Colors.grey[400],// Color de fondo del AppBar
+        backgroundColor: Colors.rojoOscurotrabajo,),
+      backgroundColor: Colors.black54,// Color de fondo del AppBar
       body: Center(
 
         child: celdasOLista(bIsList),

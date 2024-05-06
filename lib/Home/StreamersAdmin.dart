@@ -163,9 +163,8 @@ class _StreamersAdminState extends State<StreamersAdmin> {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(title: Text("Streamers"),
-        shadowColor: Colors.yellowAccent, // Color de sombra del AppBar
-        backgroundColor: Colors.purpleAccent,),
-      backgroundColor: Colors.grey[200],// Color de fondo del AppBar
+        backgroundColor: Colors.rojoOscurotrabajo,),
+      backgroundColor: Colors.black54,// Color de fondo del AppBar
       body: Center(
 
         child: celdasOLista(bIsList),

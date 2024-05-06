@@ -20,11 +20,15 @@ class CustomDrawerAdmin extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Imagen
-                Image.network(
-                  imagen,
-                  width: 100,
-                  height: 100,
+                GestureDetector(
+                  onTap: () {
+                    _showImageWithZoom(context);
+                  },
+                  child: Image.network(
+                    imagen,
+                    width: 100,
+                    height: 100,
+                  ),
                 ),
                 // Espaciado entre la imagen y el texto
                 SizedBox(width: 12),
@@ -37,7 +41,7 @@ class CustomDrawerAdmin extends StatelessWidget {
                       'Bienvenido de nuevo jefe',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -45,14 +49,14 @@ class CustomDrawerAdmin extends StatelessWidget {
                       '¿Que es lo que deseas añadir,',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 14,
+                        fontSize: 12,
                       ),
                     ),
                     Text(
                       'modificar o eliminar esta vez?',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 14,
+                        fontSize: 12,
                       ),
                     ),
                   ],
@@ -133,6 +137,24 @@ class CustomDrawerAdmin extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+  void _showImageWithZoom(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.black54, // Opcional: haz el fondo transparente
+          child: InteractiveViewer(
+            // Habilita el zoom y la panorámica
+            panEnabled: false, // Desactiva la panorámica si quieres centrar la imagen
+            scaleEnabled: true, // Habilita el zoom
+            child: Image.network(
+              imagen, // Reemplaza esto con la ruta de la imagen que deseas mostrar con zoom
+            ),
+          ),
+        );
+      },
     );
   }
 }
