@@ -9,7 +9,7 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      width: MediaQuery.of(context).size.width * 0.7, // Ajusta este valor para controlar el ancho
+      width: MediaQuery.of(context).size.width * 1, // Ajusta este valor para controlar el ancho
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -20,11 +20,16 @@ class CustomDrawer extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Imagen
-                Image.network(
-                  imagen,
-                  width: 100,
-                  height: 100,
+                // Utiliza GestureDetector alrededor de la imagen
+                GestureDetector(
+                  onTap: () {
+                    _showImageWithZoom(context);
+                  },
+                  child: Image.network(
+                    imagen,
+                    width: 100,
+                    height: 100,
+                  ),
                 ),
                 // Espaciado entre la imagen y el texto
                 SizedBox(width: 12),
@@ -37,7 +42,7 @@ class CustomDrawer extends StatelessWidget {
                       'Bienvenido al Museo Yismer',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -45,16 +50,16 @@ class CustomDrawer extends StatelessWidget {
                       'Descubre lo último sobre tus streamers',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 14,
+                        fontSize: 12,
                       ),
                     ),
                     Text(
                       'youtubers e influencers favoritos',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 14,
+                        fontSize: 12,
+                      ),
                     ),
-                    )
                   ],
                 ),
               ],
@@ -153,6 +158,25 @@ class CustomDrawer extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showImageWithZoom(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.black54, // Opcional: haz el fondo transparente
+          child: InteractiveViewer(
+            // Habilita el zoom y la panorámica
+            panEnabled: false, // Desactiva la panorámica si quieres centrar la imagen
+            scaleEnabled: true, // Habilita el zoom
+            child: Image.network(
+              imagen, // Reemplaza esto con la ruta de la imagen que deseas mostrar con zoom
+            ),
+          ),
+        );
+      },
     );
   }
 }

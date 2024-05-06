@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 
 class CustomDrawer2 extends StatelessWidget {
+  final Function(int indice)? onItemTap;
+  final String imagen;
 
-
-  Function(int indice)? onItemTap;
-  String imagen;
-
-  CustomDrawer2({Key? key, required this.onItemTap, required this.imagen
-  }) : super(key: key);
+  CustomDrawer2({Key? key, required this.onItemTap, required this.imagen}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      width: MediaQuery.of(context).size.width * 1, // Ajusta este valor para controlar el ancho
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -19,19 +17,47 @@ class CustomDrawer2 extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.black,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                // Imagen
                 Image.network(
                   imagen,
                   width: 100,
                   height: 100,
                 ),
-                //Text(
-                  //"Selecciona lo que desees",
-                  //style: TextStyle(color: Colors.red,
-                    //  fontSize: 20),
-                //),
+                // Espaciado entre la imagen y el texto
+                SizedBox(width: 12),
+                // Texto al lado de la imagen
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Bienvenido al Mundo Youtuber',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    Text(
+                      'Quieres saber mas de Vegetta777',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      ' u otros youtubers',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                    )
+                  ],
+                ),
               ],
             ),
           ),
@@ -43,7 +69,9 @@ class CustomDrawer2 extends StatelessWidget {
             ),
             title: const Text('Perfil'),
             onTap: () {
-              onItemTap!(0);
+              if (onItemTap != null) {
+                onItemTap!(0);
+              }
             },
           ),
           ListTile(
@@ -54,34 +82,37 @@ class CustomDrawer2 extends StatelessWidget {
             ),
             title: const Text('Inicio'),
             onTap: () {
-              onItemTap!(5);
+              if (onItemTap != null) {
+                onItemTap!(5);
+              }
             },
           ),
-
           ListTile(
             leading: Image.asset(
               'Resources/maps.jfif',
               width: 24.0,
               height: 24.0,
             ),
-            title: const Text('Ver Ubicacion del Museo'),
+            title: const Text('Ver Ubicación del Museo'),
             onTap: () {
-              onItemTap!(2);
+              if (onItemTap != null) {
+                onItemTap!(2);
+              }
             },
           ),
-
           ListTile(
             leading: Image.asset(
               'Resources/busqueda.jfif',
               width: 24.0,
               height: 24.0,
             ),
-            title: const Text('Busqueda de Publicación por Titulo'),
+            title: const Text('Búsqueda de Publicación por Título'),
             onTap: () {
-              onItemTap!(3);
+              if (onItemTap != null) {
+                onItemTap!(3);
+              }
             },
           ),
-
           ListTile(
             leading: Image.asset(
               'Resources/ajustes.png',
@@ -90,7 +121,9 @@ class CustomDrawer2 extends StatelessWidget {
             ),
             title: const Text('Ajustes'),
             onTap: () {
-              onItemTap!(4);
+              if (onItemTap != null) {
+                onItemTap!(4);
+              }
             },
           ),
           ListTile(
@@ -101,9 +134,11 @@ class CustomDrawer2 extends StatelessWidget {
             ),
             selectedColor: Colors.red,
             selected: true,
-            title: const Text('Cerrar Sesion'),
+            title: const Text('Cerrar Sesión'),
             onTap: () {
-              onItemTap!(1);
+              if (onItemTap != null) {
+                onItemTap!(1);
+              }
             },
           ),
         ],

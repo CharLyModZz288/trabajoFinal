@@ -9,7 +9,7 @@ class CustomDrawerAdmin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      width: MediaQuery.of(context).size.width * 0.9, // Ajusta este valor para controlar el ancho
+      width: MediaQuery.of(context).size.width * 1, // Ajusta este valor para controlar el ancho
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -42,7 +42,14 @@ class CustomDrawerAdmin extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '¿Que es lo que deseas añadir/modificar esta vez?',
+                      '¿Que es lo que deseas añadir,',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    ),
+                    Text(
+                      'modificar o eliminar esta vez?',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,
@@ -71,7 +78,7 @@ class CustomDrawerAdmin extends StatelessWidget {
               width: 24.0,
               height: 24.0,
             ),
-            title: const Text('Youtubers'),
+            title: const Text('Youtube'),
             onTap: () {
               onItemTap!(5);
             },
@@ -82,7 +89,7 @@ class CustomDrawerAdmin extends StatelessWidget {
               width: 24.0,
               height: 24.0,
             ),
-            title: const Text('Influencers'),
+            title: const Text('TikTok'),
             onTap: () {
               onItemTap!(6);
             },
@@ -93,33 +100,13 @@ class CustomDrawerAdmin extends StatelessWidget {
               width: 24.0,
               height: 24.0,
             ),
-            title: const Text('Streamers'),
+
+            title: const Text('Twitch'),
             onTap: () {
               onItemTap!(7);
             },
           ),
-          ListTile(
-            leading: Image.asset(
-              'Resources/maps.jfif',
-              width: 24.0,
-              height: 24.0,
-            ),
-            title: const Text('Ver Ubicación del Museo'),
-            onTap: () {
-              onItemTap!(2);
-            },
-          ),
-          ListTile(
-            leading: Image.asset(
-              'Resources/busqueda.jfif',
-              width: 24.0,
-              height: 24.0,
-            ),
-            title: const Text('Búsqueda de Publicación por Título'),
-            onTap: () {
-              onItemTap!(3);
-            },
-          ),
+
           ListTile(
             leading: Image.asset(
               'Resources/ajustes.png',
