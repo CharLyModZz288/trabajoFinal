@@ -12,6 +12,7 @@ import '../CustomViews/CustomButton.dart';
 import '../CustomViews/CustomCellView.dart';
 import '../CustomViews/CustomDrawer.dart';
 import '../CustomViews/CustomDrawer2.dart';
+import '../CustomViews/CustomDrawer4.dart';
 import '../CustomViews/CustomGredCellView.dart';
 import '../FirebaseObjects/FbPostId.dart';
 import '../FirebaseObjects/FbUsuario.dart';
@@ -160,16 +161,35 @@ class _HomeView4State extends State<HomeView4> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(title: Text("Streamers"),
-        backgroundColor: Colors.violetatrabajo,),
-      backgroundColor: Colors.grey[400],// Color de fondo del AppBar
-      body: Center(
+      appBar: AppBar(
+        title: Row(
+          children: [
+            // Imagen a la izquierda del título
+            Image.asset(
+              'Resources/twitch.jfif',
+              width: 24.0,
+              height: 24.0,
+            ),
 
+            SizedBox(width: 8.0),
+
+            Text("Streamers"),
+          ],
+        ),
+        backgroundColor: Colors.violetatrabajo,
+      ),
+      backgroundColor: Colors.grey[400], // Color de fondo del Scaffold
+      body: Center(
         child: celdasOLista(bIsList),
       ),
-      bottomNavigationBar: CustomButton(onBotonesClicked: this.onBottonMenuPressed, texto: 'Navegar',),
-      drawer: CustomDrawer2(onItemTap: fHomeViewDrawerOnTap, imagen: perfil.shint,),
-      /**/
+      bottomNavigationBar: CustomButton(
+        onBotonesClicked: this.onBottonMenuPressed,
+        texto: 'Navegar',
+      ),
+      drawer: CustomDrawer4(
+        onItemTap: fHomeViewDrawerOnTap,
+        imagen: perfil.shint,
+      ),
     );
   }
 

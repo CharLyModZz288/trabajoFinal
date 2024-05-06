@@ -160,9 +160,9 @@ class _HomeAdminState extends State<HomeAdmin> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(title: Text("Publicaciones"),
+      appBar: AppBar(title: Text("Publicaciones de Usuarios"),
         shadowColor: Colors.black, // Color de sombra del AppBar
-        backgroundColor: Colors.red,),
+        backgroundColor: Colors.rojoOscurotrabajo,),
       backgroundColor: Colors.black,// Color de fondo del AppBar
       body: Center(
 

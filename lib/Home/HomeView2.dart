@@ -160,17 +160,37 @@ class _HomeView2State extends State<HomeView2> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(title: Text("Youtubers"),
-        backgroundColor: Colors.rojotrabajo,),
-      backgroundColor: Colors.grey[400],// Color de fondo del AppBar
-      body: Center(
+      appBar: AppBar(
+        title: Row(
+          children: [
+            // Imagen a la izquierda del título
+            Image.asset(
+              'Resources/youtube.png',
+              width: 24.0,
+              height: 24.0,
+            ),
 
+            SizedBox(width: 8.0),
+
+            Text("Youtubers"),
+          ],
+        ),
+        backgroundColor: Colors.rojotrabajo,
+      ),
+      backgroundColor: Colors.grey[400], // Color de fondo del Scaffold
+      body: Center(
         child: celdasOLista(bIsList),
       ),
-      bottomNavigationBar: CustomButton(onBotonesClicked: this.onBottonMenuPressed, texto: 'Navegar',),
-      drawer: CustomDrawer2(onItemTap: fHomeViewDrawerOnTap, imagen: perfil.shint,),
-      /**/
+      bottomNavigationBar: CustomButton(
+        onBotonesClicked: this.onBottonMenuPressed,
+        texto: 'Navegar',
+      ),
+      drawer: CustomDrawer2(
+        onItemTap: fHomeViewDrawerOnTap,
+        imagen: perfil.shint,
+      ),
     );
+
   }
 
 
