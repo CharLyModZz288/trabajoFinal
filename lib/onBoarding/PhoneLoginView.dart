@@ -5,107 +5,145 @@ import '../CustomViews/CustomPhoneTextField.dart';
 import '../FirebaseObjects/FbUsuario.dart';
 import '../Singletone/DataHolder.dart';
 
-class PhoneLoginView extends StatefulWidget{
+class PhoneLoginView extends StatefulWidget {
   @override
   State<PhoneLoginView> createState() => _PhoneLoginViewState();
 }
 
 class _PhoneLoginViewState extends State<PhoneLoginView> {
+  final TextEditingController tecPhone = TextEditingController();
+  final TextEditingController tecVerify = TextEditingController();
+  String sVerificationCode = "";
+  bool blMostrarVerificacion = false;
 
-  TextEditingController tecPhone=TextEditingController();
-  TextEditingController tecVerify=TextEditingController();
-  String sVerificationCode="";
-  bool blMostrarVerificacion=false;
+  void enviarTelefonoPressed() async {
+    // Obtenemos el número de teléfono ingresado
+    String sTelefono = tecPhone.text.trim();
 
-  void enviarTelefonoPressed() async{
-    String sTelefono=tecPhone.text;
-
+    // Verificamos el número de teléfono
     await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: sTelefono,
-        verificationCompleted: verificacionCompletada,
-        verificationFailed: verificacionFallida,
-        codeSent: codigoEnviado,
-        codeAutoRetrievalTimeout: tiempoDeEsperaAcabado);
+      phoneNumber: sTelefono,
+      verificationCompleted: verificacionCompletada,
+      verificationFailed: verificacionFallida,
+      codeSent: codigoEnviado,
+      codeAutoRetrievalTimeout: tiempoDeEsperaAcabado,
+    );
   }
 
-  void enviarVerifyPressed() async{
-    String smsCode = tecVerify.text;
+  void enviarVerifyPressed() async {
+    // Obtenemos el código de verificación ingresado
+    String smsCode = tecVerify.text.trim();
 
-    // Create a PhoneAuthCredential with the code
-    PhoneAuthCredential credential =
-    PhoneAuthProvider.credential(verificationId: sVerificationCode, smsCode: smsCode);
+    // Creamos la credencial de autenticación con el código de verificación
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+      verificationId: sVerificationCode,
+      smsCode: smsCode,
+    );
 
-    // Sign the user in (or link) with the credential
+    // Iniciamos sesión con la credencial de autenticación
     await FirebaseAuth.instance.signInWithCredential(credential);
 
-    FbUsuario? usuario= await DataHolder().loadFbUsuario();
+    // Cargamos el usuario de Firebase
+    FbUsuario? usuario = await DataHolder().loadFbUsuario();
 
-    if(usuario!=null){
-      print("EL NOMBRE DEL USUARIO LOGEADO ES: "+usuario.nombre);
+    // Navegamos según el resultado
+    if (usuario != null) {
+      print("EL NOMBRE DEL USUARIO LOGEADO ES: ${usuario.nombre}");
       print("LA EDAD DEL USUARIO LOGEADO ES: ${usuario.edad}");
       Navigator.of(context).popAndPushNamed("/homeview");
-    }
-    else{
+    } else {
       Navigator.of(context).popAndPushNamed("/perfilview");
     }
   }
 
-  void verificacionCompletada(PhoneAuthCredential credencial) async{
-    await FirebaseAuth.instance.signInWithCredential(credencial);
+  void verificacionCompletada(PhoneAuthCredential credential) async {
+    // Autenticar al usuario automáticamente si se completa la verificación
+    await FirebaseAuth.instance.signInWithCredential(credential);
 
-    FbUsuario? usuario= await DataHolder().loadFbUsuario();
+    // Cargamos el usuario de Firebase
+    FbUsuario? usuario = await DataHolder().loadFbUsuario();
 
-    if(usuario!=null){
-      print("EL NOMBRE DEL USUARIO LOGEADO ES: "+usuario.nombre);
+    // Navegamos según el resultado
+    if (usuario != null) {
+      print("EL NOMBRE DEL USUARIO LOGEADO ES: ${usuario.nombre}");
       print("LA EDAD DEL USUARIO LOGEADO ES: ${usuario.edad}");
       Navigator.of(context).popAndPushNamed("/homeview");
-    }
-    else{
+    } else {
       Navigator.of(context).popAndPushNamed("/perfilview");
     }
   }
-  void onClickCancelar(){
 
-    Navigator.of(context).pushNamed("/loginview");
-
-  }
-
-  void verificacionFallida(FirebaseAuthException excepcion){
+  void verificacionFallida(FirebaseAuthException excepcion) {
+    // Manejo de errores de verificación
     if (excepcion.code == 'invalid-phone-number') {
-      print('The provided phone number is not valid.');
+      print('El número de teléfono proporcionado no es válido.');
+    } else {
+      print('Error de verificación de número de teléfono: ${excepcion.message}');
     }
   }
 
-  void codigoEnviado(String codigo, int? resendToken) async{
-    sVerificationCode=codigo;
+  void codigoEnviado(String codigo, int? resendToken) async {
+    // Guardamos el código de verificación enviado por SMS
+    sVerificationCode = codigo;
+
+    // Mostramos el campo de verificación en la interfaz de usuario
     setState(() {
-      blMostrarVerificacion=true;
+      blMostrarVerificacion = true;
     });
-
-
   }
 
-  void tiempoDeEsperaAcabado(String verID){
+  void tiempoDeEsperaAcabado(String verID) {
+    // Este método se ejecuta cuando el tiempo de espera de la verificación automática ha expirado.
+    // Puedes agregar lógica aquí si es necesario.
+    print("Tiempo de espera de verificación automática ha expirado.");
+  }
 
+  void onClickCancelar() {
+    // Manejo del botón de cancelar
+    Navigator.of(context).pushNamed("/loginview");
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
-      body: Column(
-        children: [
-          CustomPhoneTextField(sHint: "Numero Telefono",tecController: tecPhone),
-          TextButton(onPressed: enviarTelefonoPressed, child: Text("Enviar")),
-          if(blMostrarVerificacion)
-            CustomPhoneTextField(sHint: "Numero Verificacion",tecController: tecVerify),
-          if(blMostrarVerificacion)
-            TextButton(onPressed: enviarVerifyPressed, child: Text("Enviar")),
-            TextButton(onPressed: onClickCancelar, child: Text("Cancelar")),
-        ],
-
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomPhoneTextField(
+              sHint: "Número de Teléfono",
+              tecController: tecPhone,
+            ),
+            SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: enviarTelefonoPressed,
+              child: Text("Registrar"),
+            ),
+            SizedBox(height: 16.0),
+            if (blMostrarVerificacion)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomPhoneTextField(
+                    sHint: "Número de Verificación",
+                    tecController: tecVerify,
+                  ),
+                  SizedBox(height: 16.0),
+                  ElevatedButton(
+                    onPressed: enviarVerifyPressed,
+                    child: Text("Establecer Código"),
+                  ),
+                ],
+              ),
+            SizedBox(height: 16.0),
+            TextButton(
+              onPressed: onClickCancelar,
+              child: Text("Cancelar"),
+            ),
+          ],
+        ),
       ),
-
     );
   }
 }
