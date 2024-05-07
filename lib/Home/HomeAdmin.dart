@@ -13,6 +13,7 @@ import '../CustomViews/CustomButton.dart';
 import '../CustomViews/CustomCellView.dart';
 import '../CustomViews/CustomDrawer.dart';
 import '../CustomViews/CustomGredCellView.dart';
+import '../CustomViews/CustomGredCellViewAdmin.dart';
 import '../FirebaseObjects/FbPostId.dart';
 import '../FirebaseObjects/FbUsuario.dart';
 import '../Singletone/DataHolder.dart';
@@ -233,7 +234,7 @@ class _HomeAdminState extends State<HomeAdmin> {
 
 
   Widget? creadorDeItemMatriz(BuildContext context, int index) {
-    return CustomGredCellView(
+    return CustomGredCellViewAdmin(
       sText: posts[index].post,
       dFontSize: 20,
 
