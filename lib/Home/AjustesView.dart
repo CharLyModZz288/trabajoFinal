@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'AboutView.dart';
+import 'SecuritySettingsView.dart';
+
 class AjustesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -34,8 +37,10 @@ class AjustesView extends StatelessWidget {
             leading: Icon(Icons.security),
             title: Text('Seguridad'),
             onTap: () {
-              // Acción al tocar la opción de seguridad
-            },
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SecuritySettingsView()),
+              );            },
           ),
           ListTile(
             leading: Icon(Icons.help),
@@ -48,9 +53,13 @@ class AjustesView extends StatelessWidget {
             leading: Icon(Icons.info),
             title: Text('Acerca de'),
             onTap: () {
-              // Acción al tocar la opción de acerca de
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AboutView()),
+              );
             },
           ),
+
         ],
       ),
     );

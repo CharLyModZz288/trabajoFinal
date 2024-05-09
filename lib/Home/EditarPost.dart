@@ -1,95 +1,126 @@
-
-
-import 'dart:io';
-
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-
-import '../FirebaseObjects/FbPostId.dart';
-import '../Singletone/DataHolder.dart';
 
 class EditarPost extends StatefulWidget {
-  String? postId;
-  String? usuario;
-  String? imagen;
+  final String? postId;
+  final String? usuario;
+  final String? imagen;
   final String? tituloInicial; // Agregado
   final String? contenidoInicial; // Agregado
 
-  EditarPost({this.postId, this.usuario, this.imagen,this.tituloInicial,this.contenidoInicial});
+  EditarPost({this.postId, this.usuario, this.imagen, this.tituloInicial, this.contenidoInicial});
 
   @override
   _EditarPostState createState() => _EditarPostState();
 }
 
 class _EditarPostState extends State<EditarPost> {
-  TextEditingController _tituloController = TextEditingController();
-  TextEditingController _contenidoController = TextEditingController();
-  ImagePicker _picker = ImagePicker();
-  FirebaseFirestore db = FirebaseFirestore.instance;
-  File _imagePreview = File("");
-  late FbPostId post;
-  String userId = " ";
-  String usuario = " ";
-  String titulo = " "; // Inicializa la variable
-  String postContenido = " "; // Inicializa la variable
-  String imagenUrl = " ";
-  DataHolder conexion = DataHolder();
-  bool _isDisposed = false;
+  final TextEditingController _tituloController = TextEditingController();
+  final TextEditingController _contenidoController = TextEditingController();
+  final TextEditingController _comentarioController = TextEditingController();
+  final FirebaseFirestore db = FirebaseFirestore.instance;
+
+  String? imagenUrl;
 
   @override
   void initState() {
     super.initState();
-    // Inicializa los controladores de texto y las variables
     _tituloController.text = widget.tituloInicial ?? '';
     _contenidoController.text = widget.contenidoInicial ?? '';
-
-    // Establece los valores iniciales para titulo y postContenido
-    titulo = widget.tituloInicial ?? '';
-    postContenido = widget.contenidoInicial ?? '';
-
-    imagenUrl = widget.imagen ?? '';
-  }
-
-
-  @override
-  void dispose() {
-    _isDisposed = true;
-    super.dispose();
-    // Imprimir el ID del post en el método dispose
-    print(widget.postId.toString());
+    imagenUrl = widget.imagen;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(DataHolder().sNombre),
+        title: Text("Editar Post"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Muestra los valores de título y contenido
-            Text("Título: $titulo"),
-            Text("Contenido: $postContenido"),
+            // Mostrar título y contenido
+            Text("Título: ${_tituloController.text}"),
+            Text("Contenido: ${_contenidoController.text}"),
             SizedBox(height: 20),
-            // Muestra la imagen si la URL es válida
-            if (imagenUrl.isNotEmpty)
+            // Mostrar imagen
+            if (imagenUrl != null && imagenUrl!.isNotEmpty)
               Image.network(
-                imagenUrl,
+                imagenUrl!,
                 width: double.infinity,
                 height: 200,
                 fit: BoxFit.contain,
               ),
-            // Agrega más widgets o funciones según sea necesario
+
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: db.collection('comentarios')
+                      .doc(widget.postId)
+                    .collection('comments')
+                    .where('imagenUrl', isEqualTo: imagenUrl)
+                    .orderBy('fecha', descending: true)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return Text("Todavia no hay comentarios");
+                  }
+                  return ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      final commentData = snapshot.data!.docs[index].data() as Map<String, dynamic>;
+                      return ListTile(
+                        title: Text(commentData['usuario']),
+                        subtitle: Text(commentData['texto']),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+
+            // Campo de entrada de comentario
+            TextField(
+              controller: _comentarioController,
+              decoration: InputDecoration(
+                labelText: "Escribe un comentario",
+              ),
+            ),
+            ElevatedButton(
+              onPressed: _agregarComentario,
+              child: Text("Enviar"),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  // Método para agregar un comentario a la imagen de la publicación
+  void _agregarComentario() async {
+    final comentarioTexto = _comentarioController.text;
+    final usuarioActual = FirebaseAuth.instance.currentUser?.displayName ?? "Anónimo";
+
+    if (comentarioTexto.isNotEmpty) {
+      // Agregar comentario a Firestore, asociado al postId e imagenUrl
+      await db.collection('posts')
+          .doc(widget.postId)
+          .collection('comments')
+          .add({
+        'usuario': usuarioActual,
+        'texto': comentarioTexto,
+        'fecha': DateTime.now(),
+        'imagenUrl': imagenUrl, // Añadir la imagenUrl
+      });
+
+      // Limpia el campo de entrada después de enviar
+      _comentarioController.clear();
+    }
   }
 
 }
