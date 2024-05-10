@@ -84,17 +84,25 @@ class _EditarPostState extends State<EditarPost> {
               ),
             ),
 
-            // Campo de entrada de comentario
-            TextField(
-              controller: _comentarioController,
-              decoration: InputDecoration(
-                labelText: "Escribe un comentario",
-              ),
-            ),
-            ElevatedButton(
-              onPressed: _agregarComentario,
-              child: Text("Enviar"),
-            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _comentarioController,
+                    decoration: InputDecoration(
+                      labelText: 'Escribe un comentario',
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: _agregarComentario,
+                  child: Text('Enviar'),
+                ),
+              ],
+            )
+
           ],
         ),
       ),
