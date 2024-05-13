@@ -72,13 +72,9 @@ class _SplashViewState extends State<SplashView>{
             top: DataHolder().platformAdmin.getScreenHeight()*0.1,
             width: DataHolder().platformAdmin.getScreenWidth()*0.8,
             height: DataHolder().platformAdmin.getScreenHeight()*0.8,
-            child: Image.asset("Resources/Museo.png",)
+            child: Image.asset("Resources/logoApp.png",)
         ),
-        Positioned(
-            left: DataHolder().platformAdmin.getScreenWidth()*0.1,
-            top: DataHolder().platformAdmin.getScreenHeight()*0.1+DataHolder().platformAdmin.getScreenHeight()*0.8,
-            child: CircularProgressIndicator()
-        ),
+
 
       ],
     );

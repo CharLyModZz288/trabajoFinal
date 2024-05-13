@@ -82,6 +82,7 @@ flutter:
     - Resources/perfil.jfif
     - Resources/twitch.jfif
     - Resources/inicio.png
+    - Resources/logoApp.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
