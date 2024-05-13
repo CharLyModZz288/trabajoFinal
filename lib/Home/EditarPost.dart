@@ -57,8 +57,8 @@ class _EditarPostState extends State<EditarPost> {
 
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: db.collection('comentarios')
-                      .doc(widget.postId)
+                stream: db.collection('posts')
+                    .doc(widget.postId)
                     .collection('comments')
                     .where('imagenUrl', isEqualTo: imagenUrl)
                     .orderBy('fecha', descending: true)
@@ -69,17 +69,19 @@ class _EditarPostState extends State<EditarPost> {
                   }
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                     return Text("Todavia no hay comentarios");
+                  }else {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        final commentData = snapshot.data!.docs[index]
+                            .data() as Map<String, dynamic>;
+                        return ListTile(
+                          title: Text(commentData['usuario']),
+                          subtitle: Text(commentData['texto']),
+                        );
+                      },
+                    );
                   }
-                  return ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      final commentData = snapshot.data!.docs[index].data() as Map<String, dynamic>;
-                      return ListTile(
-                        title: Text(commentData['usuario']),
-                        subtitle: Text(commentData['texto']),
-                      );
-                    },
-                  );
                 },
               ),
             ),
@@ -103,24 +105,27 @@ class _EditarPostState extends State<EditarPost> {
               ],
             )
 
+
           ],
         ),
       ),
     );
   }
 
-  // Método para agregar un comentario a la imagen de la publicación
   void _agregarComentario() async {
     final comentarioTexto = _comentarioController.text;
-    final usuarioActual = FirebaseAuth.instance.currentUser?.displayName ?? "Anónimo";
+    final usuarioActual = FirebaseAuth.instance.currentUser;
 
-    if (comentarioTexto.isNotEmpty) {
+    if (comentarioTexto.isNotEmpty && usuarioActual != null) {
+      // Obtener el nombre de usuario
+      String nombreUsuario = usuarioActual.displayName ?? "Anónimo";
+
       // Agregar comentario a Firestore, asociado al postId e imagenUrl
       await db.collection('posts')
           .doc(widget.postId)
           .collection('comments')
           .add({
-        'usuario': usuarioActual,
+        'usuario': nombreUsuario,
         'texto': comentarioTexto,
         'fecha': DateTime.now(),
         'imagenUrl': imagenUrl, // Añadir la imagenUrl
@@ -130,5 +135,6 @@ class _EditarPostState extends State<EditarPost> {
       _comentarioController.clear();
     }
   }
+
 
 }
