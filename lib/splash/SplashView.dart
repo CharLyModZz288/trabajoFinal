@@ -29,7 +29,7 @@ class _SplashViewState extends State<SplashView>{
   }
 
   void checkSession() async{
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: 0));
 
     if (FirebaseAuth.instance.currentUser != null) {
 
@@ -66,17 +66,7 @@ class _SplashViewState extends State<SplashView>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Stack(
-      children: [
-        Positioned(
-            left: DataHolder().platformAdmin.getScreenWidth()*0.1,
-            top: DataHolder().platformAdmin.getScreenHeight()*0.1,
-            width: DataHolder().platformAdmin.getScreenWidth()*0.8,
-            height: DataHolder().platformAdmin.getScreenHeight()*0.8,
-            child: Image.asset("Resources/logoApp.png",)
-        ),
 
-
-      ],
     );
   }
 }
