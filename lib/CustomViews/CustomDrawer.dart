@@ -1,15 +1,94 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
-class CustomDrawer extends StatelessWidget {
-  Function(int indice)? onItemTap;
-  String imagen;
+class CustomDrawer extends StatefulWidget {
+  final Function(int indice) onItemTap;
+  final String imagen;
 
   CustomDrawer({Key? key, required this.onItemTap, required this.imagen}) : super(key: key);
 
   @override
+  _CustomDrawerState createState() => _CustomDrawerState();
+}
+
+class _CustomDrawerState extends State<CustomDrawer> {
+  late String _currentImage;
+  bool _isLocalImage = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentImage = widget.imagen;
+    _isLocalImage = Uri.parse(_currentImage).isScheme('file');
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: source);
+
+    if (image != null) {
+      setState(() {
+        _currentImage = image.path;
+        _isLocalImage = true;
+      });
+    }
+  }
+
+  void _showImageWithZoom(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.black54,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: InteractiveViewer(
+                  panEnabled: false,
+                  scaleEnabled: true,
+                  child: _isLocalImage
+                      ? Image.file(File(_currentImage))
+                      : Image.network(_currentImage),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      _pickImage(ImageSource.gallery);
+                    },
+                    child: Text(
+                      'Cambiar por Galería',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      _pickImage(ImageSource.camera);
+                    },
+                    child: Text(
+                      'Cambiar por Cámara',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Drawer(
-      width: MediaQuery.of(context).size.width * 1, // Ajusta este valor para controlar el ancho
+      width: MediaQuery.of(context).size.width * 1,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -20,20 +99,23 @@ class CustomDrawer extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Utiliza GestureDetector alrededor de la imagen
                 GestureDetector(
                   onTap: () {
                     _showImageWithZoom(context);
                   },
-                  child: Image.network(
-                    imagen,
+                  child: _isLocalImage
+                      ? Image.file(
+                    File(_currentImage),
+                    width: 100,
+                    height: 100,
+                  )
+                      : Image.network(
+                    _currentImage,
                     width: 100,
                     height: 100,
                   ),
                 ),
-                // Espaciado entre la imagen y el texto
                 SizedBox(width: 12),
-                // Texto al lado de la imagen
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -65,7 +147,6 @@ class CustomDrawer extends StatelessWidget {
               ],
             ),
           ),
-          // ListTile de elementos
           ListTile(
             leading: Image.asset(
               'Resources/perfil.jfif',
@@ -74,7 +155,7 @@ class CustomDrawer extends StatelessWidget {
             ),
             title: const Text('Perfil'),
             onTap: () {
-              onItemTap!(0);
+              widget.onItemTap(0);
             },
           ),
           ListTile(
@@ -85,7 +166,7 @@ class CustomDrawer extends StatelessWidget {
             ),
             title: const Text('Youtubers'),
             onTap: () {
-              onItemTap!(5);
+              widget.onItemTap(5);
             },
           ),
           ListTile(
@@ -96,7 +177,7 @@ class CustomDrawer extends StatelessWidget {
             ),
             title: const Text('Influencers'),
             onTap: () {
-              onItemTap!(6);
+              widget.onItemTap(6);
             },
           ),
           ListTile(
@@ -107,7 +188,7 @@ class CustomDrawer extends StatelessWidget {
             ),
             title: const Text('Streamers'),
             onTap: () {
-              onItemTap!(7);
+              widget.onItemTap(7);
             },
           ),
           ListTile(
@@ -118,7 +199,7 @@ class CustomDrawer extends StatelessWidget {
             ),
             title: const Text('Ver Ubicación del Museo'),
             onTap: () {
-              onItemTap!(2);
+              widget.onItemTap(2);
             },
           ),
           ListTile(
@@ -129,7 +210,7 @@ class CustomDrawer extends StatelessWidget {
             ),
             title: const Text('Búsqueda de Publicación por Título'),
             onTap: () {
-              onItemTap!(3);
+              widget.onItemTap(3);
             },
           ),
           ListTile(
@@ -140,7 +221,7 @@ class CustomDrawer extends StatelessWidget {
             ),
             title: const Text('Ajustes'),
             onTap: () {
-              onItemTap!(4);
+              widget.onItemTap(4);
             },
           ),
           ListTile(
@@ -153,30 +234,11 @@ class CustomDrawer extends StatelessWidget {
             selected: true,
             title: const Text('Cerrar Sesión'),
             onTap: () {
-              onItemTap!(1);
+              widget.onItemTap(1);
             },
           ),
         ],
       ),
-    );
-  }
-
-  void _showImageWithZoom(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.black54, // Opcional: haz el fondo transparente
-          child: InteractiveViewer(
-            // Habilita el zoom y la panorámica
-            panEnabled: false, // Desactiva la panorámica si quieres centrar la imagen
-            scaleEnabled: true, // Habilita el zoom
-            child: Image.network(
-              imagen, // Reemplaza esto con la ruta de la imagen que deseas mostrar con zoom
-            ),
-          ),
-        );
-      },
     );
   }
 }
