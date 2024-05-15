@@ -54,7 +54,7 @@ class MuseoYismer extends StatelessWidget {
     if (kIsWeb) {
       return MaterialApp(
         title: "MUSEO YISMER (Web)",
-        initialRoute: '/ajustesview',
+        initialRoute: '/splashview',
         routes: {
           ...rutasComunes,
           '/homeadmin': (context) => HomeAdmin(),

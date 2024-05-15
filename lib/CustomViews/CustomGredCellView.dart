@@ -38,10 +38,13 @@ class CustomGredCellView extends StatelessWidget{
         return InkWell(
           onTap: () {
             print("Clic en la imagen");
+            print(tituloPost);
+            print(idPost);
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => EditarPost(postId: idPost,usuario: usuario, imagen: imagen),
+
+                builder: (context) => EditarPost(postId: idPost,usuario: usuario, imagen: imagen, tituloInicial: tituloPost),
               ),
             );
           },

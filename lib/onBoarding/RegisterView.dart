@@ -26,8 +26,6 @@ class RegisterView extends StatelessWidget{
   }
 
   void onClickAceptar() async {
-
-
     switch(usuarioController.text.isEmpty || passwordMyController.text.isEmpty || passwordconfirmationMyController.text.isEmpty){
 
       case true:
@@ -63,8 +61,8 @@ class RegisterView extends StatelessWidget{
 
 
             }
-
-            Navigator.of(_context).pushNamed("/homeview");
+            print(e);
+            //Navigator.of(_context).pushNamed("/homeview");
           }
           catch (e) {
             print(e);
