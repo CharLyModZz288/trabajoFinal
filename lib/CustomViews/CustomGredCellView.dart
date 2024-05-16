@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../Home/EditarPost.dart';
 
-
-class CustomGredCellView extends StatelessWidget{
-
+class CustomGredCellView extends StatelessWidget {
   final String sText;
   final String usuario;
   final String tituloPost;
@@ -15,7 +13,8 @@ class CustomGredCellView extends StatelessWidget{
   final String idPost;
   final String contenido;
 
-  const CustomGredCellView({super.key,
+  const CustomGredCellView({
+    Key? key,
     required this.sText,
     required this.iColorCode,
     required this.imagen,
@@ -23,8 +22,8 @@ class CustomGredCellView extends StatelessWidget{
     required this.usuario,
     required this.idPost,
     required this.tituloPost,
-    required this.contenido});
-
+    required this.contenido,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +44,18 @@ class CustomGredCellView extends StatelessWidget{
             Navigator.push(
               context,
               MaterialPageRoute(
-
-                builder: (context) => EditarPost(postId: idPost,usuario: usuario, imagen: imagen, tituloInicial: tituloPost,contenidoInicial: contenido,),
+                builder: (context) => EditarPost(
+                  postId: idPost,
+                  usuario: usuario,
+                  imagen: imagen,
+                  tituloInicial: tituloPost,
+                  contenidoInicial: contenido,
+                ),
               ),
             );
           },
           child: Container(
-            color: Colors.naranjatrabajo, // Cambié el color a beige
+            color: Colors.white,
             child: Stack(
               children: [
                 if (imagen.isNotEmpty) ...[
@@ -59,7 +63,7 @@ class CustomGredCellView extends StatelessWidget{
                     width: double.infinity,
                     child: Image.network(
                       imagen,
-                      fit: BoxFit.contain,
+                      fit: BoxFit.cover, // Cambiado a BoxFit.cover
                     ),
                   ),
                   Positioned(
@@ -100,4 +104,3 @@ class CustomGredCellView extends StatelessWidget{
     );
   }
 }
-

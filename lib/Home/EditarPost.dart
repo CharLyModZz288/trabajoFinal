@@ -41,7 +41,7 @@ class _EditarPostState extends State<EditarPost> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Editar Post"),
+        title: Text("Museo Yismer"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
