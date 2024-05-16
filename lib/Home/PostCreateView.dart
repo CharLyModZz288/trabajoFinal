@@ -115,7 +115,7 @@ class _PostCreateViewState extends State<PostCreateView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(DataHolder().sNombre)),
+      appBar: AppBar(title: Text(DataHolder().sPublicar)),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -132,7 +132,7 @@ class _PostCreateViewState extends State<PostCreateView> {
               child: customTextField(
                 tecUsername: tecPost,
                 oscuro: false,
-                sHint: "Contenido",
+                sHint: "Descripcion",
               ),
             ),
             if (_imagePreview != null)

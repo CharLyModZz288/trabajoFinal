@@ -70,7 +70,7 @@ class _EditarPostState extends State<EditarPost> {
             ),
             SizedBox(height: 20),
             Text(
-              "Contenido",
+              "Descripción",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 4),
