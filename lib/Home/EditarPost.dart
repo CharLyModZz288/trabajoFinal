@@ -6,10 +6,16 @@ class EditarPost extends StatefulWidget {
   final String? postId;
   final String? usuario;
   final String? imagen;
-  final String? tituloInicial; // Agregado
-  final String? contenidoInicial; // Agregado
+  final String? tituloInicial;
+  final String? contenidoInicial;
 
-  EditarPost({this.postId, this.usuario, this.imagen, this.tituloInicial, this.contenidoInicial});
+  EditarPost({
+    this.postId,
+    this.usuario,
+    this.imagen,
+    this.tituloInicial,
+    this.contenidoInicial,
+  });
 
   @override
   _EditarPostState createState() => _EditarPostState();
@@ -42,11 +48,37 @@ class _EditarPostState extends State<EditarPost> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Mostrar título y contenido
-            Text("Título: ${_tituloController.text}"),
-            Text("Contenido: ${_contenidoController.text}"),
+            Text(
+              "Título:",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 4),
+            Text(
+              _tituloController.text,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.deepPurple,
+                shadows: [
+                  Shadow(
+                    blurRadius: 10.0,
+                    color: Colors.black.withOpacity(0.5),
+                    offset: Offset(2.0, 2.0),
+                  ),
+                ],
+              ),
+            ),
             SizedBox(height: 20),
-            // Mostrar imagen
+            Text(
+              "Contenido",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 4),
+            Text(
+              _contenidoController.text,
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 20),
             if (imagenUrl != null && imagenUrl!.isNotEmpty)
               Image.network(
                 imagenUrl!,
@@ -54,10 +86,11 @@ class _EditarPostState extends State<EditarPost> {
                 height: 200,
                 fit: BoxFit.contain,
               ),
-
+            SizedBox(height: 20),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: db.collection('posts')
+                stream: db
+                    .collection('posts')
                     .doc(widget.postId)
                     .collection('comments')
                     .where('imagenUrl', isEqualTo: imagenUrl)
@@ -68,16 +101,24 @@ class _EditarPostState extends State<EditarPost> {
                     return Center(child: CircularProgressIndicator());
                   }
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return Text("Todavia no hay comentarios");
-                  }else {
+                    return Text(
+                      "Todavía no hay comentarios",
+                      style: TextStyle(fontSize: 16),
+                    );
+                  } else {
                     return ListView.builder(
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
-                        final commentData = snapshot.data!.docs[index]
-                            .data() as Map<String, dynamic>;
-                        return ListTile(
-                          title: Text(commentData['usuario']),
-                          subtitle: Text(commentData['texto']),
+                        final commentData = snapshot.data!.docs[index].data() as Map<String, dynamic>;
+                        return Card(
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          child: ListTile(
+                            title: Text(
+                              commentData['usuario'],
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: Text(commentData['texto']),
+                          ),
                         );
                       },
                     );
@@ -85,10 +126,7 @@ class _EditarPostState extends State<EditarPost> {
                 },
               ),
             ),
-
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
                   child: TextField(
@@ -98,14 +136,13 @@ class _EditarPostState extends State<EditarPost> {
                     ),
                   ),
                 ),
+                SizedBox(width: 8),
                 ElevatedButton(
                   onPressed: _agregarComentario,
                   child: Text('Enviar'),
                 ),
               ],
-            )
-
-
+            ),
           ],
         ),
       ),
@@ -117,24 +154,16 @@ class _EditarPostState extends State<EditarPost> {
     final usuarioActual = FirebaseAuth.instance.currentUser;
 
     if (comentarioTexto.isNotEmpty && usuarioActual != null) {
-      // Obtener el nombre de usuario
       String nombreUsuario = usuarioActual.displayName ?? "Anónimo";
 
-      // Agregar comentario a Firestore, asociado al postId e imagenUrl
-      await db.collection('posts')
-          .doc(widget.postId)
-          .collection('comments')
-          .add({
+      await db.collection('posts').doc(widget.postId).collection('comments').add({
         'usuario': nombreUsuario,
         'texto': comentarioTexto,
         'fecha': DateTime.now(),
-        'imagenUrl': imagenUrl, // Añadir la imagenUrl
+        'imagenUrl': imagenUrl,
       });
 
-      // Limpia el campo de entrada después de enviar
       _comentarioController.clear();
     }
   }
-
-
 }

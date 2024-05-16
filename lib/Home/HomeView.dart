@@ -317,15 +317,18 @@ class _HomeViewState extends State<HomeView> {
 
 
   Widget? creadorDeItemLista(BuildContext context, int index) {
-    return CustomCellView(sTexto: recorrerDiccionario(miDiccionario) + " " +
-        posts[index].post,
+    return CustomCellView(
+      sTexto: recorrerDiccionario(miDiccionario) + " " +
+      posts[index].post,
       iCodigoColor: 50,
       dFuenteTamanyo: 20,
       iPosicion: index,
       imagen: posts[index].sUrlImg,
       onItemListClickedFun:onItemListClicked,
       tituloPost:  posts[index].titulo,
-      usuario: posts[index].usuario, idPost: posts[index].id, contenido: posts[index].post,);
+      usuario: posts[index].usuario,
+      idPost: posts[index].id,
+      contenido: posts[index].post,);
   }
 
 
@@ -333,11 +336,11 @@ class _HomeViewState extends State<HomeView> {
     return CustomGredCellView(
       sText: posts[index].post,
       dFontSize: 20,
-
       imagen: posts[index].sUrlImg,
       iColorCode: 0,
       usuario: posts[index].usuario,
-      tituloPost:  posts[index].titulo, idPost: posts[index].id,
+      tituloPost:  posts[index].titulo,
+      idPost: posts[index].id,
     );
   }
 
@@ -360,7 +363,7 @@ class _HomeViewState extends State<HomeView> {
     } else {
       return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2),
+              crossAxisCount: 3),
           itemCount: posts.length,
           itemBuilder: creadorDeItemMatriz
       );

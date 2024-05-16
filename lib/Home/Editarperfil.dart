@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -35,10 +34,8 @@ class _EditarperfilState extends State<Editarperfil> {
   Future<void> cargarUsuario() async {
     usuario = await conexion.fbadmin.conseguirUsuario();
     setState(() {
-      // Asignar los valores del usuario cargado a las variables locales
       nombre = usuario.nombre;
       edad = usuario.edad;
-
     });
   }
 
@@ -62,22 +59,19 @@ class _EditarperfilState extends State<Editarperfil> {
 
   Future<String> setearUrlImagen() async {
     final storageRef = FirebaseStorage.instance.ref();
-    String rutaEnNube =
-        "usuarios/" + FirebaseAuth.instance.currentUser!.uid + "/imgs/" +
-            DateTime
-                .now()
-                .millisecondsSinceEpoch
-                .toString() + ".jpg";
+    String rutaEnNube = "usuarios/" +
+        FirebaseAuth.instance.currentUser!.uid +
+        "/imgs/" +
+        DateTime.now().millisecondsSinceEpoch.toString() +
+        ".jpg";
     final rutaAFicheroEnNube = storageRef.child(rutaEnNube);
     final metadata = SettableMetadata(contentType: "image/jpeg");
     try {
       await rutaAFicheroEnNube.putFile(_imagePreview, metadata);
       String url = await rutaAFicheroEnNube.getDownloadURL();
-      print("URL de la imagen: $url");
       return url;
     } on FirebaseException catch (e) {
       print("ERROR AL SUBIR IMAGEN: " + e.toString());
-      print("STACK TRACE: " + e.stackTrace.toString());
       return "";
     }
   }
@@ -86,93 +80,100 @@ class _EditarperfilState extends State<Editarperfil> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(DataHolder().sNombre),
+        title: Text("Editar Perfil"),
+        backgroundColor: Colors.deepPurple,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            if (imagen != " ")
-              InkWell(
-                child: Image.network(
-                  imagen,
-                  width: double.infinity,
-                  height: 200,
-                  fit: BoxFit.contain,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (imagen != " ")
+                CircleAvatar(
+                  radius: 60,
+                  backgroundImage: NetworkImage(imagen),
+                ),
+              SizedBox(height: 20),
+              Text(
+                "Nombre: $nombre",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple,
                 ),
               ),
-            SizedBox(height: 20),
-            Text("Nombre: " + nombre, style: TextStyle(fontSize: 20)),
-            Text("Edad: " + edad.toString(), style: TextStyle(fontSize: 18)),
-            ElevatedButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Modificar Datos'),
-                      content: Column(
-                        children: [
-                          TextField(
-                            onChanged: (value) {
-                              nombre = value;
-                            },
-                            decoration: InputDecoration(
-                                labelText: 'Nuevo Nombre'),
-                          ),
-                          TextField(
-                            onChanged: (value) {
-                              edad = int.tryParse(value) ?? 0;
-                            },
-                            decoration: InputDecoration(
-                                labelText: 'Nueva Edad'),
-                          ),
+              SizedBox(height: 10),
+              Text(
+                "Edad: $edad",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.deepPurpleAccent,
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Modificar Datos'),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextField(
+                              onChanged: (value) {
+                                nombre = value;
+                              },
+                              decoration: InputDecoration(labelText: 'Nuevo Nombre'),
+                            ),
+                            TextField(
+                              onChanged: (value) {
+                                edad = int.tryParse(value) ?? 0;
+                              },
+                              decoration: InputDecoration(labelText: 'Nueva Edad'),
+                              keyboardType: TextInputType.number,
+                            ),
+                            SizedBox(height: 10),
+                            ElevatedButton.icon(
+                              onPressed: updateImage,
+                              icon: Icon(Icons.photo),
+                              label: Text('Galería'),
+                              style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent),
+                            ),
+                            ElevatedButton.icon(
+                              onPressed: updateImageCamera,
+                              icon: Icon(Icons.camera),
+                              label: Text('Cámara'),
+                              style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent),
+                            ),
+                          ],
+                        ),
+                        actions: [
                           ElevatedButton(
                             onPressed: () async {
-                              // Permite al usuario seleccionar una imagen desde la galería
-                              await updateImage();
+                              Navigator.of(context).pop();
+                              if (_imagePreview.existsSync()) {
+                                imagen = await setearUrlImagen();
+                              }
+                              await conexion.fbadmin.updateUserData(nombre, edad, imagen);
+                              await cargarUsuario();
+                              setState(() {});
                             },
-                            child: Text('Imagen'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              // Permite al usuario seleccionar una imagen desde la cámara
-                              await updateImageCamera();
-                            },
-                            child: Text('Cámara'),
+                            child: Text('Guardar Cambios'),
+                            style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent),
                           ),
                         ],
-                      ),
-                      actions: [
-                        ElevatedButton(
-                          onPressed: () async {
-                            // Cerrar el cuadro de diálogo
-                            Navigator.of(context).pop();
-                            if (_imagePreview.existsSync()) {
-                              // Actualizar la imagen si se ha seleccionado una nueva
-                              imagen = await setearUrlImagen();
-                            }
-                            // Actualizar los datos en Firestore
-                            await conexion.fbadmin.updateUserData(
-                                nombre,
-                                edad,
-                                imagen
-                            );
-                            // Recargar la información del usuario para reflejar los cambios
-                            await cargarUsuario();
-                            setState(() {});
-                          },
-                          child: Text('Guardar Cambios'),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              child: Text('Modificar Datos'),
-            ),
-          ],
+                      );
+                    },
+                  );
+                },
+                child: Text('Modificar Datos'),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent),
+              ),
+            ],
+          ),
         ),
       ),
     );
