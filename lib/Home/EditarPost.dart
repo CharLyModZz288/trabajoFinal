@@ -163,7 +163,7 @@ class _EditarPostState extends State<EditarPost> {
     final usuarioActual = FirebaseAuth.instance.currentUser;
 
     if (comentarioTexto.isNotEmpty && usuarioActual != null) {
-      String nombreUsuario = usuarioActual.displayName ?? "Anónimo";
+      String nombreUsuario = usuarioActual.displayName ?? usuarioActual.email ?? "Usuario";
 
       await db.collection('posts').doc(widget.postId).collection('comments').add({
         'usuario': nombreUsuario,
@@ -175,4 +175,5 @@ class _EditarPostState extends State<EditarPost> {
       _comentarioController.clear();
     }
   }
+
 }

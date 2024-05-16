@@ -26,7 +26,7 @@ import 'package:trabajofinal/splash/SplashView.dart';
 class MuseoYismer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Inicializar el DataHolder con el contexto.
+
     DataHolder().initPlatformAdmin(context);
 
     // Rutas comunes para ambas plataformas.
@@ -48,6 +48,10 @@ class MuseoYismer extends StatelessWidget {
       '/mapaview': (context) => MapaView(),
       '/editarperfil': (context) => Editarperfil(),
       '/ajustesview': (context) => AjustesView(),
+      '/homeadmin': (context) => HomeAdmin(),
+      '/youtubersadmin': (context) => YoutubersAdmin(),
+      '/influencersadmin': (context) => InfluencersAdmin(),
+      '/streamersadmin': (context) => StreamersAdmin(),
     };
 
     // Si la aplicación se está ejecutando en la web.
