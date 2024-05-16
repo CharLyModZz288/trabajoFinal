@@ -332,6 +332,7 @@ class _YoutubersAdminState extends State<YoutubersAdmin> {
     return CustomGredCellView(
       sText: posts[index].post,
       dFontSize: 20,
+      contenido: posts[index].post,
 
       imagen: posts[index].sUrlImg,
       iColorCode: 0,

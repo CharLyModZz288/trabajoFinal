@@ -13,6 +13,7 @@ class CustomGredCellView extends StatelessWidget{
   final String imagen;
   final double dFontSize;
   final String idPost;
+  final String contenido;
 
   const CustomGredCellView({super.key,
     required this.sText,
@@ -21,7 +22,8 @@ class CustomGredCellView extends StatelessWidget{
     required this.dFontSize,
     required this.usuario,
     required this.idPost,
-    required this.tituloPost});
+    required this.tituloPost,
+    required this.contenido});
 
 
   @override
@@ -44,7 +46,7 @@ class CustomGredCellView extends StatelessWidget{
               context,
               MaterialPageRoute(
 
-                builder: (context) => EditarPost(postId: idPost,usuario: usuario, imagen: imagen, tituloInicial: tituloPost),
+                builder: (context) => EditarPost(postId: idPost,usuario: usuario, imagen: imagen, tituloInicial: tituloPost,contenidoInicial: contenido,),
               ),
             );
           },

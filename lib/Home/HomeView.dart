@@ -317,9 +317,8 @@ class _HomeViewState extends State<HomeView> {
 
 
   Widget? creadorDeItemLista(BuildContext context, int index) {
-    return CustomCellView(
-      sTexto: recorrerDiccionario(miDiccionario) + " " +
-      posts[index].post,
+    return CustomCellView(sTexto: recorrerDiccionario(miDiccionario) + " " +
+        posts[index].post,
       iCodigoColor: 50,
       dFuenteTamanyo: 20,
       iPosicion: index,
@@ -340,7 +339,9 @@ class _HomeViewState extends State<HomeView> {
       iColorCode: 0,
       usuario: posts[index].usuario,
       tituloPost:  posts[index].titulo,
+      contenido: posts[index].post,
       idPost: posts[index].id,
+
     );
   }
 

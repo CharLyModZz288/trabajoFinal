@@ -343,7 +343,7 @@ class _HomeView3State extends State<HomeView3> {
     return CustomGredCellView(
       sText: posts[index].post,
       dFontSize: 20,
-
+      contenido: posts[index].post,
       imagen: posts[index].sUrlImg,
       iColorCode: 0,
       usuario: posts[index].usuario,
