@@ -93,7 +93,6 @@ class _EditarPostState extends State<EditarPost> {
                     .collection('posts')
                     .doc(widget.postId)
                     .collection('comments')
-                    .where('imagenUrl', isEqualTo: imagenUrl)
                     .orderBy('fecha', descending: true)
                     .snapshots(),
                 builder: (context, snapshot) {
@@ -126,6 +125,7 @@ class _EditarPostState extends State<EditarPost> {
                 },
               ),
             ),
+
             Row(
               children: [
                 Expanded(
