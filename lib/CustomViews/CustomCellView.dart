@@ -57,7 +57,7 @@ class CustomCellView extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => EditarPost(postId: idPost,usuario: usuario, imagen: imagen),
+                    builder: (context) => EditarPost(postId: idPost,usuario: usuario, imagen: imagen,tituloInicial: tituloPost,contenidoInicial: contenido,),
                   ),
                 );
               },

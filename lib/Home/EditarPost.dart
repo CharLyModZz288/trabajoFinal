@@ -148,6 +148,15 @@ class _EditarPostState extends State<EditarPost> {
       ),
     );
   }
+  Future<List<Map<String, dynamic>>> getComments(String postId) async {
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postId)
+        .collection('comments')
+        .get();
+
+    return snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+  }
 
   void _agregarComentario() async {
     final comentarioTexto = _comentarioController.text;
