@@ -1,6 +1,32 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class HelpAndSupportView extends StatelessWidget {
+class HelpAndSupportView extends StatefulWidget {
+  @override
+  _HelpAndSupportViewState createState() => _HelpAndSupportViewState();
+}
+
+class _HelpAndSupportViewState extends State<HelpAndSupportView> {
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _messageController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _getEmail();
+  }
+
+  void _getEmail() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    if (auth.currentUser != null) {
+      String email = auth.currentUser!.email!;
+      setState(() {
+        _emailController.text = email;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,18 +44,14 @@ class HelpAndSupportView extends StatelessWidget {
             ),
             SizedBox(height: 20.0),
             TextField(
-              decoration: InputDecoration(
-                labelText: 'Nombre',
-              ),
-            ),
-            SizedBox(height: 10.0),
-            TextField(
+              controller: _emailController,
               decoration: InputDecoration(
                 labelText: 'Correo electrónico',
               ),
             ),
             SizedBox(height: 10.0),
             TextField(
+              controller: _messageController, // Asociar el controlador del mensaje
               maxLines: 4,
               decoration: InputDecoration(
                 labelText: 'Mensaje',
@@ -39,7 +61,7 @@ class HelpAndSupportView extends StatelessWidget {
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                // Implementa la lógica para enviar el formulario de contacto
+                _sendContactForm(context);
               },
               child: Text('Enviar'),
             ),
@@ -47,5 +69,34 @@ class HelpAndSupportView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _sendContactForm(BuildContext context) {
+    // Aquí podrías implementar la lógica para enviar el formulario de contacto o una api para que llegue al correo electrónico.
+    _messageController.clear(); // Limpiar el campo de texto del mensaje
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Mensaje enviado'),
+          content: Text('¡Tu mensaje ha sido enviado con éxito!'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Aceptar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _messageController.dispose(); // Liberar el controlador del mensaje
+    super.dispose();
   }
 }
