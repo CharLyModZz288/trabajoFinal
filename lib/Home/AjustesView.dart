@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'AboutView.dart';
+import 'HelpAndSupportView.dart';
+import 'LanguageView.dart';
 import 'SecuritySettingsView.dart';
 
 class AjustesView extends StatelessWidget {
@@ -23,16 +25,12 @@ class AjustesView extends StatelessWidget {
             leading: Icon(Icons.language),
             title: Text('Idioma'),
             onTap: () {
-              // Acción al tocar la opción de idioma
-            },
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LanguageView()),
+              );},
           ),
-          ListTile(
-            leading: Icon(Icons.account_circle),
-            title: Text('Cuenta'),
-            onTap: () {
-              // Acción al tocar la opción de cuenta
-            },
-          ),
+
           ListTile(
             leading: Icon(Icons.security),
             title: Text('Seguridad'),
@@ -40,14 +38,16 @@ class AjustesView extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => SecuritySettingsView()),
-              );            },
+              );},
           ),
           ListTile(
             leading: Icon(Icons.help),
             title: Text('Ayuda y soporte'),
             onTap: () {
-              // Acción al tocar la opción de ayuda y soporte
-            },
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HelpAndSupportView()),
+            );},
           ),
           ListTile(
             leading: Icon(Icons.info),
