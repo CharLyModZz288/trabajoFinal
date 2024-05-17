@@ -23,7 +23,9 @@ class MapaViewState extends State<MapaView> {
   };
 
   static final CameraPosition _kMadrid = CameraPosition(
-    target: LatLng(40.4168, -3.7038),
+    //target: LatLng(40.4168, -3.7038),
+    //zoom: 14.0,
+    target: LatLng(40.342077, -3.524675),
     zoom: 14.0,
   );
 
