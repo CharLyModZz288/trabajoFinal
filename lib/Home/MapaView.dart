@@ -39,26 +39,36 @@ class MapaViewState extends State<MapaView> {
           },
         ),
       ),
-      body: GoogleMap(
-        mapType: MapType.normal,
-        initialCameraPosition: _kMadrid,
-        onMapCreated: (GoogleMapController controller) {
-          _controller = controller;
-          agregarMarcadorInicial();
-        },
-        markers: marcadores,
-        polylines: polylines,
-        gestureRecognizers: {
-          Factory<PanGestureRecognizer>(() => PanGestureRecognizer()),
-          Factory<ScaleGestureRecognizer>(() => ScaleGestureRecognizer()),
-          Factory<TapGestureRecognizer>(() => TapGestureRecognizer()),
-          Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer()),
-        },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _showTransportOptions,
-        label: Text('Opciones de ruta'),
-        icon: Icon(Icons.directions),
+      body: Stack(
+        children: [
+          GoogleMap(
+            mapType: MapType.normal,
+            initialCameraPosition: _kMadrid,
+            onMapCreated: (GoogleMapController controller) {
+              _controller = controller;
+              agregarMarcadorInicial();
+            },
+            markers: marcadores,
+            polylines: polylines,
+            gestureRecognizers: {
+              Factory<PanGestureRecognizer>(() => PanGestureRecognizer()),
+              Factory<ScaleGestureRecognizer>(() => ScaleGestureRecognizer()),
+              Factory<TapGestureRecognizer>(() => TapGestureRecognizer()),
+              Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer()),
+            },
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: FloatingActionButton.extended(
+                onPressed: _showTransportOptions,
+                label: Text('Opciones de ruta'),
+                icon: Icon(Icons.directions),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -130,11 +140,7 @@ class MapaViewState extends State<MapaView> {
         });
 
         var tiempoEstimado = ruta['legs'][0]['duration']['text'];
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Modo: ${modeNames[mode]}, Tiempo estimado: $tiempoEstimado'),
-          ),
-        );
+        _showEstimatedTimeDialog(mode, tiempoEstimado);
       } else {
         print('Error en la respuesta de la API de Direcciones: ${json['status']}');
         ScaffoldMessenger.of(context).showSnackBar(
@@ -151,6 +157,26 @@ class MapaViewState extends State<MapaView> {
         ),
       );
     }
+  }
+
+  void _showEstimatedTimeDialog(String mode, String tiempoEstimado) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Tiempo estimado'),
+          content: Text('${modeNames[mode]}, Tiempo estimado: $tiempoEstimado'),
+          actions: [
+            TextButton(
+              child: Text('Aceptar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   List<LatLng> _decodePoly(String poly) {
@@ -199,7 +225,7 @@ class MapaViewState extends State<MapaView> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: 150,
+          height: MediaQuery.of(context).size.height * 0.2,
           child: Column(
             children: transportModes.map((mode) {
               return ListTile(
@@ -222,4 +248,5 @@ class MapaViewState extends State<MapaView> {
       },
     );
   }
+
 }
