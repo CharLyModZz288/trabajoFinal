@@ -116,6 +116,7 @@ class MapaViewState extends State<MapaView> {
         var puntos = _decodePoly(puntosCodificados);
 
         setState(() {
+          polylines.clear(); // Limpiamos las polylíneas antes de agregar una nueva
           polylines.add(Polyline(
             polylineId: PolylineId(mode),
             points: puntos,
