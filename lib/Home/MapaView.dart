@@ -23,11 +23,32 @@ class MapaViewState extends State<MapaView> {
   };
 
   static final CameraPosition _kMadrid = CameraPosition(
-    //target: LatLng(40.4168, -3.7038),
-    //zoom: 14.0,
-    target: LatLng(40.342077, -3.524675),
+    target: LatLng(40.4168, -3.7038),
     zoom: 14.0,
   );
+
+  final List<Map<String, dynamic>> locations = [
+    {
+      'title': 'Puerta del Sol',
+      'position': LatLng(40.416775, -3.703790),
+    },
+    {
+      'title': 'Plaza Mayor',
+      'position': LatLng(40.41610297733032, -3.7072444022172397),
+    },
+    {
+      'title': 'Parque del Retiro',
+      'position': LatLng(40.423324, -3.705227),
+    },
+    {
+      'title': 'Museo del Prado',
+      'position': LatLng(40.41348901779781, -3.6923098631669085),
+    },
+    {
+      'title': 'Gran Vía',
+      'position': LatLng(40.419631661619235, -3.70119333898133),
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +69,7 @@ class MapaViewState extends State<MapaView> {
             initialCameraPosition: _kMadrid,
             onMapCreated: (GoogleMapController controller) {
               _controller = controller;
-              agregarMarcadorInicial();
+              agregarMarcadores();
             },
             markers: marcadores,
             polylines: polylines,
@@ -75,20 +96,22 @@ class MapaViewState extends State<MapaView> {
     );
   }
 
-  void agregarMarcadorInicial() {
-    Marker marcadorInicial = Marker(
-      markerId: MarkerId('inicial'),
-      position: _kMadrid.target,
-      infoWindow: InfoWindow(title: 'Madrid'),
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-    );
+  void agregarMarcadores() {
+    locations.forEach((location) {
+      Marker marcador = Marker(
+        markerId: MarkerId(location['title']),
+        position: location['position'],
+        infoWindow: InfoWindow(title: location['title']),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+      );
 
-    setState(() {
-      marcadores.add(marcadorInicial);
+      setState(() {
+        marcadores.add(marcador);
+      });
     });
   }
 
-  Future<void> _irADondeEstas(String mode) async {
+  Future<void> _irADondeEstas(String mode, LatLng destino) async {
     LatLng ubicacionUsuario = LatLng(40.421112921683, -3.567800203332735);
 
     CameraPosition posicionCamera = CameraPosition(
@@ -110,7 +133,7 @@ class MapaViewState extends State<MapaView> {
       marcadores.add(marcador);
     });
 
-    await _obtenerRuta(_kMadrid.target, ubicacionUsuario, mode);
+    await _obtenerRuta(destino, ubicacionUsuario, mode);
   }
 
   Future<void> _obtenerRuta(LatLng inicio, LatLng fin, String mode) async {
@@ -222,12 +245,36 @@ class MapaViewState extends State<MapaView> {
     return points;
   }
 
+  void _showDestinationOptions(String mode) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Elige un destino'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: locations.map((location) {
+                return ListTile(
+                  title: Text(location['title']),
+                  onTap: () {
+                    Navigator.pop(context);  // Cerrar el diálogo de selección de destino
+                    _irADondeEstas(mode, location['position']);  // Pasar la posición seleccionada
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   void _showTransportOptions() {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: MediaQuery.of(context).size.height * 0.2,
+          height: MediaQuery.of(context).size.height * 0.25,
           child: Column(
             children: transportModes.map((mode) {
               return ListTile(
@@ -240,8 +287,8 @@ class MapaViewState extends State<MapaView> {
                 ),
                 title: Text(modeNames[mode]!),
                 onTap: () {
-                  Navigator.pop(context);
-                  _irADondeEstas(mode);
+                  Navigator.pop(context);  // Cerrar el cuadro modal de opciones de transporte
+                  _showDestinationOptions(mode);  // Mostrar el diálogo de selección de destino
                 },
               );
             }).toList(),
@@ -250,5 +297,4 @@ class MapaViewState extends State<MapaView> {
       },
     );
   }
-
 }

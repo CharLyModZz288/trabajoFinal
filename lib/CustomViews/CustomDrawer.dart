@@ -199,7 +199,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               width: 24.0,
               height: 24.0,
             ),
-            title: const Text('Ver Ubicación del Museo'),
+            title: const Text('Convenciones'),
             onTap: () {
               widget.onItemTap(2);
             },
@@ -232,7 +232,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             onTap: () {
               Navigator.push(
                 context,
-                  widget.onItemTap(1)
+                  widget.onItemTap(8)
               );},
           ),
           ListTile(
