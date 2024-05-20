@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:trabajofinal/Home/AjustesView.dart';
+import 'package:trabajofinal/Home/FavoritesView.dart';
 import 'package:trabajofinal/Home/HomeAdmin.dart';
 import 'package:trabajofinal/Home/HomeView2.dart';
 import 'package:trabajofinal/Home/StreamersAdmin.dart';
@@ -53,6 +54,7 @@ class MuseoYismer extends StatelessWidget {
       '/youtubersadmin': (context) => YoutubersAdmin(),
       '/influencersadmin': (context) => InfluencersAdmin(),
       '/streamersadmin': (context) => StreamersAdmin(),
+      '/favoritesview': (context) => FavoritesView(),
     };
 
     // Si la aplicación se está ejecutando en la web.

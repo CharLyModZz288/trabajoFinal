@@ -28,6 +28,7 @@ class _EditarPostState extends State<EditarPost> {
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
   String? imagenUrl;
+  bool isFavorite = false;
 
   @override
   void initState() {
@@ -35,6 +36,22 @@ class _EditarPostState extends State<EditarPost> {
     _tituloController.text = widget.tituloInicial ?? '';
     _contenidoController.text = widget.contenidoInicial ?? '';
     imagenUrl = widget.imagen;
+    _checkIfFavorite();
+  }
+
+  void _checkIfFavorite() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final favoriteSnapshot = await db
+          .collection('users')
+          .doc(user.uid)
+          .collection('favorites')
+          .doc(widget.postId)
+          .get();
+      setState(() {
+        isFavorite = favoriteSnapshot.exists;
+      });
+    }
   }
 
   @override
@@ -42,6 +59,23 @@ class _EditarPostState extends State<EditarPost> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Museo Yismer"),
+        actions: [
+          IconButton(
+            icon: Icon(
+              isFavorite ? Icons.star : Icons.star_border,
+              color: isFavorite ? Colors.yellow : Colors.white,
+              size: 30, // Aumentar el tamaño del icono
+              shadows: [
+                Shadow(
+                  blurRadius: 4.0,
+                  color: Colors.black.withOpacity(0.5),
+                  offset: Offset(2.0, 2.0),
+                ),
+              ],
+            ),
+            onPressed: _toggleFavorite,
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -125,7 +159,6 @@ class _EditarPostState extends State<EditarPost> {
                 },
               ),
             ),
-
             Row(
               children: [
                 Expanded(
@@ -148,6 +181,7 @@ class _EditarPostState extends State<EditarPost> {
       ),
     );
   }
+
   Future<List<Map<String, dynamic>>> getComments(String postId) async {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection('posts')
@@ -176,4 +210,25 @@ class _EditarPostState extends State<EditarPost> {
     }
   }
 
+  void _toggleFavorite() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final favoriteRef = db.collection('users').doc(user.uid).collection('favorites').doc(widget.postId);
+      if (isFavorite) {
+        await favoriteRef.delete();
+      } else {
+        await favoriteRef.set({
+          'postId': widget.postId,
+          'usuario': widget.usuario,
+          'imagen': widget.imagen,
+          'titulo': _tituloController.text,
+          'contenido': _contenidoController.text,
+          'fecha': DateTime.now(),
+        });
+      }
+      setState(() {
+        isFavorite = !isFavorite;
+      });
+    }
+  }
 }
