@@ -23,10 +23,11 @@ import 'package:trabajofinal/onBoarding/PhoneLoginView.dart';
 import 'package:trabajofinal/onBoarding/RegisterView.dart';
 import 'package:trabajofinal/splash/SplashView.dart';
 
+import 'Home/ThemeView.dart';
+
 class MuseoYismer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     DataHolder().initPlatformAdmin(context);
 
     // Rutas comunes para ambas plataformas.

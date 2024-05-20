@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../Home/SecuritySettingsView.dart';
+
 class CustomDrawer extends StatefulWidget {
   final Function(int indice) onItemTap;
   final String imagen;
@@ -223,6 +225,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
             onTap: () {
               widget.onItemTap(4);
             },
+          ),
+          ListTile(
+            leading: Icon(Icons.favorite),
+            title: const Text('Favoritos'),
+            onTap: () {
+              Navigator.push(
+                context,
+                  widget.onItemTap(1)
+              );},
           ),
           ListTile(
             leading: Image.asset(
