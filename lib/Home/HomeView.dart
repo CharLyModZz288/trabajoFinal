@@ -1,8 +1,6 @@
-
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +15,7 @@ import '../FirebaseObjects/FbUsuario.dart';
 import '../Singletone/DataHolder.dart';
 import '../onBoarding/LoginView.dart';
 
-class HomeView extends StatefulWidget{
+class HomeView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -26,8 +24,6 @@ class HomeView extends StatefulWidget{
 }
 
 class _HomeViewState extends State<HomeView> {
-
-
   TextEditingController bdUsuarioNombre = TextEditingController();
   TextEditingController bdUsuarioEdad = TextEditingController();
 
@@ -35,16 +31,13 @@ class _HomeViewState extends State<HomeView> {
   DataHolder dataHolder = DataHolder();
   late FbUsuario perfil;
   bool bIsList = false;
-  final Map<String,FbPostId> mapPosts = Map();
+  final Map<String, FbPostId> mapPosts = Map();
   final List<FbPostId> posts = [];
   final List<FbUsuario> listaUsuarios = [];
   late Future<FbUsuario> _futurePerfil;
   late String imagenurl;
 
   Map<String, dynamic> miDiccionario = {};
-
-
-
 
   @override
   void initState() {
@@ -55,33 +48,32 @@ class _HomeViewState extends State<HomeView> {
     loadGeoLocator();
   }
 
-  void loadGeoLocator() async{
-    Position pos=await DataHolder().geolocAdmin.determinePosition();
-    print("------------>>>> "+pos.toString());
+  void loadGeoLocator() async {
+    Position pos = await DataHolder().geolocAdmin.determinePosition();
+    print("------------>>>> " + pos.toString());
     DataHolder().geolocAdmin.registrarCambiosLoc();
-
   }
 
-  void descargarPosts() async{
-
+  void descargarPosts() async {
     posts.clear();
 
-    CollectionReference<FbPostId> postsRef = db.collection("PostUsuario")
-        .withConverter(
+    CollectionReference<FbPostId> postsRef = db.collection("PostUsuario").withConverter(
       fromFirestore: FbPostId.fromFirestore,
-      toFirestore: (FbPostId post, _) => post.toFirestore(),);
+      toFirestore: (FbPostId post, _) => post.toFirestore(),
+    );
 
-    postsRef.snapshots().listen(datosDescargados, onError: descargaPostError,);
-
+    postsRef.snapshots().listen(
+      datosDescargados,
+      onError: descargaPostError,
+    );
   }
 
-  void datosDescargados(QuerySnapshot<FbPostId> postsdescargados)
-  {
-    print("NUMERO DE POSTS ACTUALIZADOS>>>> "+postsdescargados.docChanges.length.toString());
+  void datosDescargados(QuerySnapshot<FbPostId> postsdescargados) {
+    print("NUMERO DE POSTS ACTUALIZADOS>>>> " + postsdescargados.docChanges.length.toString());
 
-    for(int i=0;i<postsdescargados.docChanges.length;i++){
+    for (int i = 0; i < postsdescargados.docChanges.length; i++) {
       FbPostId temp = postsdescargados.docChanges[i].doc.data()!;
-      mapPosts[postsdescargados.docChanges[i].doc.id]=temp;
+      mapPosts[postsdescargados.docChanges[i].doc.id] = temp;
     }
     setState(() {
       posts.clear();
@@ -89,15 +81,13 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
-  void descargaPostError(error){
+  void descargaPostError(error) {
     print("Listen failed: $error");
   }
 
   void uploadImageToFirebase(File imageFile) async {
     if (imageFile != null) {
-      Reference storageReference = FirebaseStorage.instance
-          .ref()
-          .child('user_profile_images/${DateTime.now()}.png');
+      Reference storageReference = FirebaseStorage.instance.ref().child('user_profile_images/${DateTime.now()}.png');
 
       UploadTask uploadTask = storageReference.putFile(imageFile);
 
@@ -109,39 +99,31 @@ class _HomeViewState extends State<HomeView> {
         print('Carga completada');
       });
       String downloadURL = await storageReference.getDownloadURL();
-
     }
   }
 
   void conseguirUsuario() async {
-
     FbUsuario perfil = await dataHolder.fbadmin.conseguirUsuario();
     setState(() {
       this.perfil = perfil;
     });
-
   }
 
-  void onItemListClicked(int index){
-    DataHolder().selectedPost=posts[index];
+  void onItemListClicked(int index) {
+    DataHolder().selectedPost = posts[index];
 
     Navigator.of(context).pushNamed("/usuarioview");
-
   }
-
 
   void onBottonMenuPressed(int indice) {
     setState(() {
-      switch(indice)
-      {
+      switch (indice) {
         case 0:
           descargarPosts();
-          if(posts.isEmpty)
-          {
+          if (posts.isEmpty) {
             print("Lista vacia");
           }
           bIsList = true;
-
           break;
         case 1:
           bIsList = false;
@@ -159,26 +141,54 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(title: Text("Publicaciones"),
-        backgroundColor: Colors.amarillotrabajo,),
-      backgroundColor: Colors.grey[400],// Color de fondo del AppBar
+      appBar: AppBar(
+        title: Text("Publicaciones"),
+        backgroundColor: Colors.amarillotrabajo,
+      ),
+      backgroundColor: Colors.grey[400], // Color de fondo del AppBar
       body: Center(
-
         child: celdasOLista(bIsList),
       ),
-      bottomNavigationBar: CustomButton(onBotonesClicked: this.onBottonMenuPressed, texto: 'Navegar',),
-      drawer: CustomDrawer(onItemTap: fHomeViewDrawerOnTap, imagen: perfil.shint,),
-      floatingActionButton:FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed("/postcreateview");
-        },
-        child: Icon(Icons.add),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              icon: Icon(Icons.list),
+              onPressed: () {
+                setState(() {
+                  bIsList = true;
+                });
+              },
+            ),
+            FloatingActionButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed("/postcreateview");
+              },
+              child: Icon(Icons.add),
+              backgroundColor: Colors.amarillotrabajo,
+              elevation: 0,
+            ),
+            IconButton(
+              icon: Icon(Icons.grid_view),
+              onPressed: () {
+                setState(() {
+                  bIsList = false;
+                });
+              },
+            ),
+
+          ],
+        ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
-      /**/
+
+      drawer: CustomDrawer(
+        onItemTap: fHomeViewDrawerOnTap,
+        imagen: perfil.shint,
+      ),
+
     );
   }
-
 
   String recorrerDiccionario(Map diccionario) {
     String valores = '';
@@ -204,10 +214,7 @@ class _HomeViewState extends State<HomeView> {
         '/editarperfil',
         arguments: {},
       );
-
-    }
-
-    else if (indice == 3) {
+    } else if (indice == 3) {
       TextEditingController _searchController = TextEditingController();
 
       showDialog(
@@ -222,7 +229,7 @@ class _HomeViewState extends State<HomeView> {
                 TextField(
                   controller: _searchController,
                   decoration: InputDecoration(
-                    hintText: 'Que titulo deseas buscar',
+                    hintText: 'Qué título deseas buscar',
                     contentPadding: EdgeInsets.all(16.0),
                   ),
                 ),
@@ -232,8 +239,7 @@ class _HomeViewState extends State<HomeView> {
                     if (searchValue.isNotEmpty) {
                       Navigator.of(context).pop(); // Cerrar el diálogo de búsqueda
 
-                      List<Map<String, dynamic>> searchResults =
-                      await DataHolder().fbadmin.searchPostsByTitle(searchValue);
+                      List<Map<String, dynamic>> searchResults = await DataHolder().fbadmin.searchPostsByTitle(searchValue);
 
                       if (searchResults.isNotEmpty) {
                         showDialog(
@@ -274,7 +280,7 @@ class _HomeViewState extends State<HomeView> {
                           builder: (BuildContext context) {
                             return AlertDialog(
                               title: Text('Resultados de la Búsqueda'),
-                              content: Text('No han busquedas relacionadas con tu peticion.'),
+                              content: Text('No hay búsquedas relacionadas con tu petición.'),
                               actions: [
                                 TextButton(
                                   child: Text('Aceptar'),
@@ -296,43 +302,35 @@ class _HomeViewState extends State<HomeView> {
           );
         },
       );
-    }
-    else if(indice == 2)
-    {
+    } else if (indice == 2) {
       Navigator.of(context).pushNamed('/mapaview');
-    }
-    else if(indice==4){
+    } else if (indice == 4) {
       Navigator.of(context).pushNamed('/ajustesview');
-    }
-    else if(indice==5){
+    } else if (indice == 5) {
       Navigator.of(context).pushNamed('/homeview2');
-    }
-    else if(indice==6){
+    } else if (indice == 6) {
       Navigator.of(context).pushNamed('/homeview3');
-    }
-    else if(indice==7){
+    } else if (indice == 7) {
       Navigator.of(context).pushNamed('/homeview4');
-    }
-    else if(indice==8){
+    } else if (indice == 8) {
       Navigator.of(context).pushNamed('/favoritesview');
-    }
-  }
-
+      }
+      }
 
   Widget? creadorDeItemLista(BuildContext context, int index) {
-    return CustomCellView(sTexto: recorrerDiccionario(miDiccionario) + " " +
-        posts[index].post,
+    return CustomCellView(
+      sTexto: recorrerDiccionario(miDiccionario) + " " + posts[index].post,
       iCodigoColor: 50,
       dFuenteTamanyo: 20,
       iPosicion: index,
       imagen: posts[index].sUrlImg,
-      onItemListClickedFun:onItemListClicked,
-      tituloPost:  posts[index].titulo,
+      onItemListClickedFun: onItemListClicked,
+      tituloPost: posts[index].titulo,
       usuario: posts[index].usuario,
       idPost: posts[index].id,
-      contenido: posts[index].post,);
+      contenido: posts[index].post,
+    );
   }
-
 
   Widget? creadorDeItemMatriz(BuildContext context, int index) {
     return CustomGredCellView(
@@ -341,10 +339,9 @@ class _HomeViewState extends State<HomeView> {
       imagen: posts[index].sUrlImg,
       iColorCode: 0,
       usuario: posts[index].usuario,
-      tituloPost:  posts[index].titulo,
+      tituloPost: posts[index].titulo,
       contenido: posts[index].post,
       idPost: posts[index].id,
-
     );
   }
 
@@ -366,11 +363,13 @@ class _HomeViewState extends State<HomeView> {
       );
     } else {
       return GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3),
-          itemCount: posts.length,
-          itemBuilder: creadorDeItemMatriz
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+        ),
+        itemCount: posts.length,
+        itemBuilder: creadorDeItemMatriz,
       );
     }
   }
 }
+
