@@ -8,7 +8,6 @@ import '../CustomViews/CustomTextField.dart';
 import '../Singletone/DataHolder.dart';
 
 class LoginView extends StatelessWidget {
-
   FirebaseFirestore db = FirebaseFirestore.instance;
   late BuildContext _context;
   DataHolder conexion = DataHolder();
@@ -66,11 +65,9 @@ class LoginView extends StatelessWidget {
                 Text(
                   'El usuario es responsable de mantener la confidencialidad de su información de inicio de sesión y de todas las actividades que ocurran bajo su cuenta. Museo YISMER no será responsable de ninguna pérdida o daño derivado del incumplimiento de esta obligación por parte del usuario.',
                 ),
-                // Agrega más secciones de términos y condiciones según sea necesario
               ],
             ),
           ),
-
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -83,7 +80,6 @@ class LoginView extends StatelessWidget {
       },
     );
   }
-
 
   void onClickPrivacyPolicy(BuildContext context) {
     showDialog(
@@ -135,11 +131,9 @@ class LoginView extends StatelessWidget {
                 Text(
                   'Implementamos medidas de seguridad para proteger la información personal de nuestros usuarios contra accesos no autorizados, alteraciones, divulgaciones o destrucciones no autorizadas. Sin embargo, no podemos garantizar la seguridad absoluta de la información transmitida a través de Internet.',
                 ),
-                // Agrega más secciones de la política de privacidad según sea necesario
               ],
             ),
           ),
-
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -153,41 +147,39 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  void onClickRegistrar(){
+  void onClickRegistrar() {
     Navigator.of(_context).pushNamed("/registerview");
   }
-  void onClickRegistrarConMovil(){
+
+  void onClickRegistrarConMovil() {
     Navigator.of(_context).pushNamed("/phoneloginview");
   }
 
   void onClickAceptar() async {
-
     if (usuarioControlador.text.isEmpty || usuarioPassword.text.isEmpty) {
       CustomDialog.show(_context, "No está todo relleno, compruébalo");
       return;
     }
 
     try {
-      // Inicia sesión con las credenciales
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: usuarioControlador.text,
-          password: usuarioPassword.text
+        email: usuarioControlador.text,
+        password: usuarioPassword.text,
       );
+
+      await conexion.incrementarContadorDeIniciosDeSesion();  // Incrementa el contador de inicios de sesión
 
       if (credential.user?.email == 'administrador@administrador.com') {
         Navigator.of(_context).popAndPushNamed("/homeadmin");
       } else {
-        if (await conexion.fbadmin.existenDatos()){
+        if (await conexion.fbadmin.existenDatos()) {
           Navigator.of(_context).popAndPushNamed("/homeview");
         } else {
           Navigator.of(_context).popAndPushNamed("/perfilview");
         }
       }
-
     } on FirebaseAuthException catch (e) {
-      // Maneja los errores de autenticación
       CustomDialog.show(_context, "Usuario o contraseña incorrectos");
-
       if (e.code == 'user-not-found') {
         CustomDialog.show(_context, "El usuario no existe");
       } else if (e.code == 'wrong-password') {
@@ -199,67 +191,66 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _context = context;
-    // Construcción de la vista
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Login'),
-          centerTitle: true,
-          backgroundColor: Colors.amarillotrabajo,
-        ),
-        backgroundColor: Colors.grey[400],
-        body:
-        Center(
-          child: ConstrainedBox(constraints: BoxConstraints(
+      appBar: AppBar(
+        title: const Text('Login'),
+        centerTitle: true,
+        backgroundColor: Colors.amarillotrabajo,
+      ),
+      backgroundColor: Colors.grey[400],
+      body: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
             minWidth: 500,
             minHeight: 700,
             maxWidth: 1000,
             maxHeight: 900,
           ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Bienvenido al Museo Yismer", style: TextStyle(fontSize: 25)),
-                Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 60, vertical: 16),
-                    child: customTextField(
-                      tecUsername: usuarioControlador,
-                      oscuro: false,
-                      sHint: "Usuario",
-                    )
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Bienvenido al Museo Yismer", style: TextStyle(fontSize: 25)),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 60, vertical: 16),
+                child: customTextField(
+                  tecUsername: usuarioControlador,
+                  oscuro: false,
+                  sHint: "Usuario",
                 ),
-                Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 60, vertical: 16),
-                    child: customTextField(
-                      tecUsername: usuarioPassword,
-                      oscuro: true,
-                      sHint: "Contraseña",
-                    )
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 60, vertical: 16),
+                child: customTextField(
+                  tecUsername: usuarioPassword,
+                  oscuro: true,
+                  sHint: "Contraseña",
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomButton(onPressed: onClickAceptar, texto: 'Aceptar',),
-                    CustomButton(onPressed: onClickRegistrar, texto: 'Registrarse',),
-                    CustomButton(onPressed: onClickRegistrarConMovil, texto: 'Registrarse con móvil',),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomButton(
-                      onPressed: () => onClickTermsAndConditions(context), // Corregido aquí
-                      texto: 'Términos y condiciones',
-                    ),
-                    CustomButton(
-                      onPressed: () => onClickPrivacyPolicy(context), // Ejemplo de otro botón, sin cambios
-                      texto: 'Politicas de privacidad',
-                    ),
-                  ],
-                ),
-
-              ],
-            ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomButton(onPressed: onClickAceptar, texto: 'Aceptar'),
+                  CustomButton(onPressed: onClickRegistrar, texto: 'Registrarse'),
+                  CustomButton(onPressed: onClickRegistrarConMovil, texto: 'Registrarse con móvil'),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomButton(
+                    onPressed: () => onClickTermsAndConditions(context),
+                    texto: 'Términos y condiciones',
+                  ),
+                  CustomButton(
+                    onPressed: () => onClickPrivacyPolicy(context),
+                    texto: 'Políticas de privacidad',
+                  ),
+                ],
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

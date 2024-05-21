@@ -34,7 +34,7 @@ class _PerfilViewState extends State<PerfilView> {
 
     String imageUrl = await setearUrlImagen();
     print(imageUrl);
-    conexion.fbadmin.anadirUsuario(tecNombre.text, int.parse(tecEdad.text), imageUrl,);
+    conexion.fbadmin.anadirUsuario(tecNombre.text, int.parse(tecEdad.text), imageUrl,0);
     Navigator.of(_context).popAndPushNamed("/homeview");
   }
 

@@ -22,6 +22,7 @@ class _EditarperfilState extends State<Editarperfil> {
   String nombre = " ";
   int edad = 0;
   String imagen = " ";
+  int loginCount = 0;
   ImagePicker _picker = ImagePicker();
   File _imagePreview = File("");
 
@@ -36,6 +37,7 @@ class _EditarperfilState extends State<Editarperfil> {
     setState(() {
       nombre = usuario.nombre;
       edad = usuario.edad;
+      loginCount = usuario.loginCount;  // Asumiendo que FbUsuario tiene un campo loginCount
     });
   }
 
@@ -111,6 +113,14 @@ class _EditarperfilState extends State<Editarperfil> {
                   color: Colors.deepPurpleAccent,
                 ),
               ),
+              SizedBox(height: 10),
+              Text(
+                "Inicios de Sesión: $loginCount",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.deepPurpleAccent,
+                ),
+              ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
@@ -157,7 +167,7 @@ class _EditarperfilState extends State<Editarperfil> {
                               if (_imagePreview.existsSync()) {
                                 imagen = await setearUrlImagen();
                               }
-                              await conexion.fbadmin.updateUserData(nombre, edad, imagen);
+                              await conexion.fbadmin.updateUserData(nombre, edad, imagen,loginCount);
                               await cargarUsuario();
                               setState(() {});
                             },
