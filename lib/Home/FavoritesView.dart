@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FavoritesView extends StatelessWidget {
@@ -31,14 +30,8 @@ class FavoritesView extends StatelessWidget {
             return Center(child: Text("No tienes publicaciones favoritas"));
           }
 
-          return GridView.builder(
+          return ListView.builder(
             padding: const EdgeInsets.all(8.0),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, // Número de columnas en la cuadrícula
-              crossAxisSpacing: 8.0,
-              mainAxisSpacing: 8.0,
-              childAspectRatio: 0.75, // Ajusta la proporción según tus necesidades
-            ),
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
               final favoriteData = snapshot.data!.docs[index].data() as Map<String, dynamic>;
@@ -52,37 +45,42 @@ class FavoritesView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15.0),
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      favoriteData['imagen'] != null && favoriteData['imagen'].isNotEmpty
-                          ? Image.network(
-                        favoriteData['imagen'],
-                        width: double.infinity,
-                        height: 120,
-                        fit: BoxFit.cover,
-                      )
-                          : Container(
-                        color: Colors.grey,
-                        height: 120,
-                        width: double.infinity,
-                        child: Icon(Icons.image, size: 50, color: Colors.white),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
+                      ListTile(
+                        leading: favoriteData['imagen'] != null && favoriteData['imagen'].isNotEmpty
+                            ? Image.network(
+                          favoriteData['imagen'],
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
+                        )
+                            : Container(
+                          color: Colors.grey,
+                          width: 50,
+                          height: 50,
+                          child: Icon(Icons.image, size: 50, color: Colors.white),
+                        ),
+                        title: Text(
                           favoriteData['titulo'],
                           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(
+                        subtitle: Text(
                           favoriteData['contenido'],
                           style: TextStyle(fontSize: 14),
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            (favoriteData['fecha'] as Timestamp).toDate().toString(),
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
                         ),
                       ),
                     ],
