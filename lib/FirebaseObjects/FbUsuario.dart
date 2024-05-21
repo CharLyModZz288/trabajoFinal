@@ -6,6 +6,7 @@ class FbUsuario{
    int edad;
    String shint;
    int loginCount;
+   Timestamp lastLoginDate;
    //GeoPoint geoloc;
 
   FbUsuario ({
@@ -13,6 +14,7 @@ class FbUsuario{
     required this.edad,
     required this.shint,
     required this.loginCount,
+    required this.lastLoginDate,
   });
 
   factory FbUsuario.fromFirestore(
@@ -25,6 +27,7 @@ class FbUsuario{
         nombre: data?['nombre'] != null ? data!['nombre'] : "",
         edad: data?['edad'] != null ? data!['edad'] : 0,
         loginCount: data?['loginCount'] != null ? data!['loginCount'] : 0,
+      lastLoginDate: data?['lastLoginDate'] ?? Timestamp.now(),
         //geoloc:data?['geoloc'] != null ? data!['geoloc'] : GeoPoint(0, 0)
     );
   }
@@ -34,7 +37,8 @@ class FbUsuario{
       if (nombre != null) "nombre": nombre,
       if (edad != null) "edad": edad,
       if (shint != null) "shint": shint,
-      if (loginCount != null) "loginCount": loginCount
+      if (loginCount != null) "loginCount": loginCount,
+      if (lastLoginDate != null) "lastLoginDate": lastLoginDate
       //if (geoloc != null) "geoloc": geoloc,
     };
   }
