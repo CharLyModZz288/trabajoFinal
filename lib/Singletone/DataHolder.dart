@@ -47,21 +47,6 @@ class DataHolder {
     return usuario;
   }
 
-  Future<void> incrementarContadorDeIniciosDeSesion() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      DocumentReference usuarioRef = db.collection('Usuarios').doc(user.uid);
-      await db.runTransaction((transaction) async {
-        DocumentSnapshot snapshot = await transaction.get(usuarioRef);
-        if (!snapshot.exists) {
-          throw Exception("Usuario no encontrado!");
-        }
-        int nuevoConteo = (snapshot.data() as Map<String, dynamic>)['loginCount'] ?? 0;
-        nuevoConteo++;
-        transaction.update(usuarioRef, {'loginCount': nuevoConteo});
-      });
-    }
-  }
 
   void initPlatformAdmin(BuildContext context) {
     platformAdmin = PlatformAdmin(context: context);

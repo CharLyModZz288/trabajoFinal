@@ -37,7 +37,6 @@ class _EditarperfilState extends State<Editarperfil> {
     setState(() {
       nombre = usuario.nombre;
       edad = usuario.edad;
-      loginCount = usuario.loginCount;
       lastLoginDate = usuario.lastLoginDate; // Actualización para mostrar la fecha
     });
   }
@@ -116,14 +115,6 @@ class _EditarperfilState extends State<Editarperfil> {
               ),
               SizedBox(height: 10),
               Text(
-                "Inicios de Sesión: $loginCount",
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.deepPurpleAccent,
-                ),
-              ),
-              SizedBox(height: 10),
-              Text(
                 "Último inicio de sesión: ${DateTime.fromMillisecondsSinceEpoch(lastLoginDate.seconds * 1000)}",
                 style: TextStyle(
                   fontSize: 20,
@@ -176,7 +167,7 @@ class _EditarperfilState extends State<Editarperfil> {
                               if (_imagePreview.existsSync()) {
                                 imagen = await setearUrlImagen();
                               }
-                              await conexion.fbadmin.updateUserData(nombre, edad, imagen, loginCount, lastLoginDate);
+                              await conexion.fbadmin.updateUserData(nombre, edad, imagen, lastLoginDate);
                               await cargarUsuario();
                               setState(() {});
                             },

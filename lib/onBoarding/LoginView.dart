@@ -167,7 +167,7 @@ class LoginView extends StatelessWidget {
         password: usuarioPassword.text,
       );
 
-      await conexion.incrementarContadorDeIniciosDeSesion();  // Incrementa el contador de inicios de sesión
+        // Incrementa el contador de inicios de sesión
 
       if (credential.user?.email == 'administrador@administrador.com') {
         Navigator.of(_context).popAndPushNamed("/homeadmin");
