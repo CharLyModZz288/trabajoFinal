@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../main.dart';
+
 class LanguageView extends StatefulWidget {
   @override
   _LanguageViewState createState() => _LanguageViewState();
@@ -12,14 +14,14 @@ class _LanguageViewState extends State<LanguageView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Language View'),
+        title: Text('Idioma'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Select your preferred language:',
+              'Selecciona tu idioma:',
               style: TextStyle(fontSize: 18.0),
             ),
             SizedBox(height: 20.0),
@@ -30,7 +32,7 @@ class _LanguageViewState extends State<LanguageView> {
                   _selectedLanguage = newValue!;
                 });
               },
-              items: <String>['English', 'Spanish', 'French', 'German']
+              items: <String>['English', 'Spanish']
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -41,16 +43,19 @@ class _LanguageViewState extends State<LanguageView> {
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                // Aquí puedes agregar la lógica para aplicar el idioma seleccionado
-                // por ejemplo, puedes usar paquetes de internacionalización como 'flutter_localizations'
-                // o cambiar manualmente el idioma de tu aplicación.
+                // Cambiar el idioma de toda la aplicación
+                if (_selectedLanguage == 'Spanish') {
+                  MyApp.setLocale(context, Locale('es'));
+                } else {
+                  MyApp.setLocale(context, Locale('en'));
+                }
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('Language changed to: $_selectedLanguage'),
                   ),
                 );
               },
-              child: Text('Apply Language'),
+              child: Text('Aplicar'),
             ),
           ],
         ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'ThemeManager.dart';
 
 class ThemeView extends StatefulWidget {
@@ -57,8 +56,8 @@ class _ThemeViewState extends State<ThemeView> {
       default:
         ThemeManager.currentTheme = ThemeData.light();
     }
+
+    // Forzar una reconstrucción de toda la aplicación
+    setState(() {});
   }
-
-
-
 }

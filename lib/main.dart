@@ -1,6 +1,10 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:trabajofinal/Home/ThemeManager.dart'; // Importa el ThemeManager
+import 'package:trabajofinal/Home/ThemeView.dart'; // Importa el ThemeView
 import 'Trabajofinal.dart';
 import 'firebase_options.dart';
 
@@ -13,12 +17,44 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  static void setLocale(BuildContext context, Locale newLocale) {
+    _MyAppState state = context.findAncestorStateOfType<_MyAppState>()!;
+    state.setLocale(newLocale);
+  }
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Locale? _locale;
+
+  void setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      //theme: ThemeData.light(), // Cambia el tema según tus preferencias
+      locale: _locale ?? Locale('es'), // Establece el idioma predeterminado a español
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate, // Agrega el delegate de CupertinoLocalizations
+      ],
+      supportedLocales: [
+        const Locale('en'), // Inglés
+        const Locale('es'), // Español
+        // Otros idiomas que desees soportar
+      ],
+      theme: ThemeManager.currentTheme, // Establece el tema globalmente
       home: MuseoYismer(),
+      routes: {
+        '/themeview': (context) => ThemeView(), // Agrega la ruta para ThemeView
+      },
     );
   }
 }
