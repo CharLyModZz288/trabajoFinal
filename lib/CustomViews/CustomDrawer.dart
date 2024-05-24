@@ -1,94 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-
-class CustomDrawerAnimation extends StatefulWidget {
-  final Widget drawer;
-  final Widget child;
-  final Function() onDrawerOpened;
-  final Function() onDrawerClosed;
-
-  const CustomDrawerAnimation({
-    required this.drawer,
-    required this.child,
-    required this.onDrawerOpened,
-    required this.onDrawerClosed,
-  });
-
-  @override
-  _CustomDrawerAnimationState createState() => _CustomDrawerAnimationState();
-}
-
-class _CustomDrawerAnimationState extends State<CustomDrawerAnimation>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  final double maxSlide = 225;
-  bool _isDrawerOpen = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 300),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void toggleDrawer() {
-    if (_isDrawerOpen) {
-      _controller.reverse();
-      widget.onDrawerClosed();
-    } else {
-      _controller.forward();
-      widget.onDrawerOpened();
-    }
-    _isDrawerOpen = !_isDrawerOpen;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        GestureDetector(
-          onTap: () {
-            if (_isDrawerOpen) {
-              toggleDrawer();
-            }
-          },
-          child: widget.child,
-        ),
-        AnimatedBuilder(
-          animation: _controller,
-          builder: (context, _) {
-            double angle = _controller.value * pi / 2;
-            double xTranslation = MediaQuery.of(context).size.width * 1 * _controller.value;
-            return Transform(
-              transform: Matrix4.identity()
-                ..setEntry(3, 2, 0.001) // Perspective
-                ..rotateY(angle)
-                ..translate(xTranslation),
-              alignment: Alignment.centerLeft,
-              child: ClipRect(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  widthFactor: 0.6,
-                  child: widget.drawer,
-                ),
-              ),
-            );
-          },
-        ),
-      ],
-    );
-  }
-}
 
 class CustomDrawer extends StatefulWidget {
   final Function(int indice) onItemTap;
@@ -177,6 +89,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      width: MediaQuery.of(context).size.width * 1, // Ajusta este valor para controlar el ancho
+
       child: Container(
         color: Colors.white,
         child: ListView(
