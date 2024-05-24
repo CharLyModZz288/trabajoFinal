@@ -64,7 +64,7 @@ class _EditarPostState extends State<EditarPost> {
             icon: Icon(
               isFavorite ? Icons.star : Icons.star_border,
               color: isFavorite ? Colors.yellow : Colors.white,
-              size: 30, // Aumentar el tamaño del icono
+              size: 30,
               shadows: [
                 Shadow(
                   blurRadius: 4.0,
@@ -75,6 +75,58 @@ class _EditarPostState extends State<EditarPost> {
             ),
             onPressed: _toggleFavorite,
           ),
+          if (FirebaseAuth.instance.currentUser?.uid == widget.usuario)
+            IconButton(
+              icon: Icon(
+                Icons.edit,
+                color: Colors.white,
+                size: 30,
+                shadows: [
+                  Shadow(
+                    blurRadius: 4.0,
+                    color: Colors.black.withOpacity(0.5),
+                    offset: Offset(2.0, 2.0),
+                  ),
+                ],
+              ),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Modificar Datos del Post'),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextField(
+                            controller: _tituloController,
+                            decoration: InputDecoration(labelText: 'Nuevo Título'),
+                          ),
+                          TextField(
+                            controller: _contenidoController,
+                            decoration: InputDecoration(labelText: 'Nuevo Contenido'),
+                          ),
+                        ],
+                      ),
+                      actions: [
+                        ElevatedButton(
+                          onPressed: () {
+                            // Actualizar los datos en Firebase
+                            db.collection('posts').doc(widget.postId).update({
+                              'titulo': _tituloController.text,
+                              'contenido': _contenidoController.text,
+                            });
+                            Navigator.of(context).pop();
+                            setState(() {});
+                          },
+                          child: Text('Guardar Cambios'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
         ],
       ),
       body: Padding(

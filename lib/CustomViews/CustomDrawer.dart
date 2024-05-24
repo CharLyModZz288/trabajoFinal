@@ -1,14 +1,101 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
+import 'dart:math';
+import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
-import '../Home/SecuritySettingsView.dart';
+class CustomDrawerAnimation extends StatefulWidget {
+  final Widget drawer;
+  final Widget child;
+  final Function() onDrawerOpened;
+  final Function() onDrawerClosed;
+
+  const CustomDrawerAnimation({
+    required this.drawer,
+    required this.child,
+    required this.onDrawerOpened,
+    required this.onDrawerClosed,
+  });
+
+  @override
+  _CustomDrawerAnimationState createState() => _CustomDrawerAnimationState();
+}
+
+class _CustomDrawerAnimationState extends State<CustomDrawerAnimation>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  final double maxSlide = 225;
+  bool _isDrawerOpen = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void toggleDrawer() {
+    if (_isDrawerOpen) {
+      _controller.reverse();
+      widget.onDrawerClosed();
+    } else {
+      _controller.forward();
+      widget.onDrawerOpened();
+    }
+    _isDrawerOpen = !_isDrawerOpen;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        GestureDetector(
+          onTap: () {
+            if (_isDrawerOpen) {
+              toggleDrawer();
+            }
+          },
+          child: widget.child,
+        ),
+        AnimatedBuilder(
+          animation: _controller,
+          builder: (context, _) {
+            double angle = _controller.value * pi / 2;
+            double xTranslation = MediaQuery.of(context).size.width * 0.6 * _controller.value;
+            return Transform(
+              transform: Matrix4.identity()
+                ..setEntry(3, 2, 0.001) // Perspective
+                ..rotateY(angle)
+                ..translate(xTranslation),
+              alignment: Alignment.centerLeft,
+              child: ClipRect(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  widthFactor: 0.6,
+                  child: widget.drawer,
+                ),
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
 
 class CustomDrawer extends StatefulWidget {
   final Function(int indice) onItemTap;
   final String imagen;
 
-  CustomDrawer({Key? key, required this.onItemTap, required this.imagen}) : super(key: key);
+  CustomDrawer({Key? key, required this.onItemTap, required this.imagen})
+      : super(key: key);
 
   @override
   _CustomDrawerState createState() => _CustomDrawerState();
@@ -90,166 +177,99 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      width: MediaQuery.of(context).size.width * 1,
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.black,
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    _showImageWithZoom(context);
-                  },
-                  child: _isLocalImage
-                      ? Image.file(
-                    File(_currentImage),
-                    width: 100,
-                    height: 100,
-                  )
-                      : Image.network(
-                    _currentImage,
-                    width: 100,
-                    height: 100,
+      child: Container(
+        color: Colors.white,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.black,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      _showImageWithZoom(context);
+                    },
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.white,
+                      backgroundImage: _isLocalImage
+                          ? FileImage(File(_currentImage))
+                          : NetworkImage(_currentImage) as ImageProvider,
+                    ),
                   ),
-                ),
-                SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Bienvenido al Museo Yismer',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Bienvenido al Museo Yismer',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Text(
-                      'Descubre lo último sobre tus streamers',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),
-                    ),
-                    Text(
-                      'youtubers e influencers favoritos',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          ListTile(
-            leading: Image.asset(
-              'Resources/perfil.jfif',
-              width: 24.0,
-              height: 24.0,
-            ),
-            title: const Text('Perfil'),
-            onTap: () {
+            _buildCircularListTile('Resources/perfil.jfif', 'Perfil', () {
               widget.onItemTap(0);
-            },
-          ),
-          ListTile(
-            leading: Image.asset(
-              'Resources/youtube.png',
-              width: 24.0,
-              height: 24.0,
-            ),
-            title: const Text('Youtubers'),
-            onTap: () {
+            }),
+            _buildCircularListTile('Resources/youtube.png', 'Youtubers', () {
               widget.onItemTap(5);
-            },
-          ),
-          ListTile(
-            leading: Image.asset(
-              'Resources/tik tok.png',
-              width: 24.0,
-              height: 24.0,
-            ),
-            title: const Text('Influencers'),
-            onTap: () {
+            }),
+            _buildCircularListTile('Resources/tik tok.png', 'Influencers', () {
               widget.onItemTap(6);
-            },
-          ),
-          ListTile(
-            leading: Image.asset(
-              'Resources/twitch.jfif',
-              width: 24.0,
-              height: 24.0,
-            ),
-            title: const Text('Streamers'),
-            onTap: () {
+            }),
+            _buildCircularListTile('Resources/twitch.jfif', 'Streamers', () {
               widget.onItemTap(7);
-            },
-          ),
-          ListTile(
-            leading: Image.asset(
-              'Resources/maps.jfif',
-              width: 24.0,
-              height: 24.0,
-            ),
-            title: const Text('Convenciones'),
-            onTap: () {
+            }),
+            _buildCircularListTile('Resources/maps.jfif', 'Convenciones', () {
               widget.onItemTap(2);
-            },
-          ),
-          ListTile(
-            leading: Image.asset(
-              'Resources/busqueda.jfif',
-              width: 24.0,
-              height: 24.0,
-            ),
-            title: const Text('Búsqueda de Publicación por Título'),
-            onTap: () {
+            }),
+            _buildCircularListTile('Resources/busqueda.jfif', 'Búsqueda', () {
               widget.onItemTap(3);
-            },
-          ),
-          ListTile(
-            leading: Image.asset(
-              'Resources/ajustes.png',
-              width: 24.0,
-              height: 24.0,
-            ),
-            title: const Text('Ajustes'),
-            onTap: () {
+            }),
+            _buildCircularListTile('Resources/ajustes.png', 'Ajustes', () {
               widget.onItemTap(4);
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.favorite),
-            title: const Text('Favoritos'),
-            onTap: () {
-              Navigator.push(
-                context,
-                  widget.onItemTap(8)
-              );},
-          ),
-          ListTile(
-            leading: Image.asset(
-              'Resources/logout.jfif',
-              width: 24.0,
-              height: 24.0,
-            ),
-            selectedColor: Colors.red,
-            selected: true,
-            title: const Text('Cerrar Sesión'),
-            onTap: () {
+            }),
+            _buildCircularListTile('Resources/corazon.png', 'Favoritos', () {
+              widget.onItemTap(8);
+            }),
+            _buildCircularListTile('Resources/logout.jfif', 'Cerrar Sesión', () {
               widget.onItemTap(1);
-            },
-          ),
-        ],
+            }),
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget _buildCircularListTile(
+      String imagePath, String title, VoidCallback onTap) {
+    return ListTile(
+      title: Center(
+        child: Column(
+          children: [
+            CircleAvatar(
+              radius: 24,
+              backgroundColor: Colors.black,
+              child: CircleAvatar(
+                radius: 22,
+                backgroundColor: Colors.white,
+                backgroundImage: AssetImage(imagePath),
+              ),
+            ),
+            SizedBox(height: 4),
+            Text(
+              title,
+              style: TextStyle(color: Colors.black),
+            ),
+          ],
+        ),
+      ),
+      onTap: onTap,
     );
   }
 }
