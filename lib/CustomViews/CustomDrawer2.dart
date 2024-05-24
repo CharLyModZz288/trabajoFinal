@@ -17,21 +17,18 @@ class CustomDrawer2 extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.black,
             ),
-            child: Row(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // Imagen
-                Image.network(
-                  imagen,
-                  width: 100,
-                  height: 100,
+                CircleAvatar(
+                  radius: 50,
+                  backgroundImage: NetworkImage(imagen),
                 ),
-                // Espaciado entre la imagen y el texto
-                SizedBox(width: 12),
-                // Texto al lado de la imagen
+                SizedBox(height: 12), // Espacio entre la imagen y el texto
+                // Texto debajo de la imagen
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'Bienvenido al Mundo Youtuber',
@@ -42,107 +39,70 @@ class CustomDrawer2 extends StatelessWidget {
                       ),
                     ),
 
-                    Text(
-                      'Quieres saber mas de Vegetta777',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),
-                    ),
-                    Text(
-                      ' u otros youtubers',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),
-                    )
                   ],
                 ),
               ],
             ),
           ),
-          ListTile(
-            leading: Image.asset(
-              'Resources/perfil.jfif',
-              width: 24.0,
-              height: 24.0,
-            ),
-            title: const Text('Perfil'),
-            onTap: () {
-              if (onItemTap != null) {
-                onItemTap!(0);
-              }
-            },
-          ),
-          ListTile(
-            leading: Image.asset(
-              'Resources/inicio.png',
-              width: 24.0,
-              height: 24.0,
-            ),
-            title: const Text('Inicio'),
-            onTap: () {
-              if (onItemTap != null) {
-                onItemTap!(5);
-              }
-            },
-          ),
-          ListTile(
-            leading: Image.asset(
-              'Resources/maps.jfif',
-              width: 24.0,
-              height: 24.0,
-            ),
-            title: const Text('Ver Ubicación del Museo'),
-            onTap: () {
-              if (onItemTap != null) {
-                onItemTap!(2);
-              }
-            },
-          ),
-          ListTile(
-            leading: Image.asset(
-              'Resources/busqueda.jfif',
-              width: 24.0,
-              height: 24.0,
-            ),
-            title: const Text('Búsqueda de Publicación por Título'),
-            onTap: () {
-              if (onItemTap != null) {
-                onItemTap!(3);
-              }
-            },
-          ),
-          ListTile(
-            leading: Image.asset(
-              'Resources/ajustes.png',
-              width: 24.0,
-              height: 24.0,
-            ),
-            title: const Text('Ajustes'),
-            onTap: () {
-              if (onItemTap != null) {
-                onItemTap!(4);
-              }
-            },
-          ),
-          ListTile(
-            leading: Image.asset(
-              'Resources/logout.jfif',
-              width: 24.0,
-              height: 24.0,
-            ),
-            selectedColor: Colors.red,
-            selected: true,
-            title: const Text('Cerrar Sesión'),
-            onTap: () {
-              if (onItemTap != null) {
-                onItemTap!(1);
-              }
-            },
-          ),
+          _buildCircularListTile('Resources/perfil.jfif', 'Perfil', () {
+            if (onItemTap != null) {
+              onItemTap!(0);
+            }
+          }),
+          _buildCircularListTile('Resources/inicio.png', 'Inicio', () {
+            if (onItemTap != null) {
+              onItemTap!(5);
+            }
+          }),
+          _buildCircularListTile('Resources/maps.jfif', 'Convenciones', () {
+            if (onItemTap != null) {
+              onItemTap!(2);
+            }
+          }),
+          _buildCircularListTile('Resources/busqueda.jfif', 'Búsqueda', () {
+            if (onItemTap != null) {
+              onItemTap!(3);
+            }
+          }),
+          _buildCircularListTile('Resources/ajustes.png', 'Ajustes', () {
+            if (onItemTap != null) {
+              onItemTap!(4);
+            }
+          }),
+          _buildCircularListTile('Resources/logout.jfif', 'Cerrar Sesión', () {
+            if (onItemTap != null) {
+              onItemTap!(1);
+            }
+          }),
         ],
       ),
+    );
+  }
+
+  Widget _buildCircularListTile(
+      String imagePath, String title, VoidCallback onTap) {
+    return ListTile(
+      title: Center(
+        child: Column(
+          children: [
+            CircleAvatar(
+              radius: 24,
+              backgroundColor: Colors.black,
+              child: CircleAvatar(
+                radius: 22,
+                backgroundColor: Colors.white,
+                backgroundImage: AssetImage(imagePath),
+              ),
+            ),
+            SizedBox(height: 4),
+            Text(
+              title,
+              style: TextStyle(color: Colors.black),
+            ),
+          ],
+        ),
+      ),
+      onTap: onTap,
     );
   }
 }

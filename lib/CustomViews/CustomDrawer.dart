@@ -68,7 +68,7 @@ class _CustomDrawerAnimationState extends State<CustomDrawerAnimation>
           animation: _controller,
           builder: (context, _) {
             double angle = _controller.value * pi / 2;
-            double xTranslation = MediaQuery.of(context).size.width * 0.6 * _controller.value;
+            double xTranslation = MediaQuery.of(context).size.width * 1 * _controller.value;
             return Transform(
               transform: Matrix4.identity()
                 ..setEntry(3, 2, 0.001) // Perspective
