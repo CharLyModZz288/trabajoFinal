@@ -14,15 +14,19 @@ class CustomGredCellViewAdmin extends StatelessWidget{
   final String imagen;
   final double dFontSize;
   final String idPost;
+  final String contenido;
 
-  const CustomGredCellViewAdmin({super.key,
+  const CustomGredCellViewAdmin({
+    Key? key,
     required this.sText,
     required this.iColorCode,
     required this.imagen,
     required this.dFontSize,
     required this.usuario,
     required this.idPost,
-    required this.tituloPost});
+    required this.tituloPost,
+    required this.contenido,
+  }) : super(key: key);
 
 
   @override
@@ -42,7 +46,13 @@ class CustomGredCellViewAdmin extends StatelessWidget{
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => EditarPostAdmin(postId: idPost,usuario: usuario, imagen: imagen),
+                builder: (context) => EditarPostAdmin(
+                    postId: idPost,
+                    usuario: usuario,
+                    imagen: imagen,
+                    tituloInicial: tituloPost,
+                    contenidoInicial: contenido,
+                ),
               ),
             );
           },

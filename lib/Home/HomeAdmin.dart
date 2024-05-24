@@ -169,16 +169,44 @@ class _HomeAdminState extends State<HomeAdmin> {
 
         child: celdasOLista(bIsList),
       ),
-      bottomNavigationBar: CustomButton(onBotonesClicked: this.onBottonMenuPressed, texto: 'Navegar',),
-      drawer: CustomDrawerAdmin(onItemTap: fHomeViewDrawerOnTap, imagen: perfil.shint,),
-      floatingActionButton:FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed("/postcreateview");
-        },
-        child: Icon(Icons.add),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              icon: Icon(Icons.list),
+              onPressed: () {
+                setState(() {
+                  bIsList = true;
+                });
+              },
+            ),
+            FloatingActionButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed("/postcreateview");
+              },
+              child: Icon(Icons.add),
+              backgroundColor: Colors.amarillotrabajo,
+              elevation: 0,
+            ),
+            IconButton(
+              icon: Icon(Icons.grid_view),
+              onPressed: () {
+                setState(() {
+                  bIsList = false;
+                });
+              },
+            ),
+
+          ],
+        ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
-      /**/
+      drawer: CustomDrawerAdmin(
+        onItemTap: fHomeViewDrawerOnTap,
+        imagen: perfil.shint,
+      ),
+
+
     );
   }
 
@@ -221,15 +249,18 @@ class _HomeAdminState extends State<HomeAdmin> {
 
 
   Widget? creadorDeItemLista(BuildContext context, int index) {
-    return CustomCellView(sTexto: recorrerDiccionario(miDiccionario) + " " +
-        posts[index].post,
+    return CustomCellView(
+      sTexto: recorrerDiccionario(miDiccionario) + " " + posts[index].post,
       iCodigoColor: 50,
       dFuenteTamanyo: 20,
       iPosicion: index,
       imagen: posts[index].sUrlImg,
       onItemListClickedFun:onItemListClicked,
       tituloPost:  posts[index].titulo,
-      usuario: posts[index].usuario, idPost: posts[index].id, contenido: posts[index].post,);
+      usuario: posts[index].usuario,
+      idPost: posts[index].id,
+      contenido: posts[index].post,
+    );
   }
 
 
@@ -237,11 +268,12 @@ class _HomeAdminState extends State<HomeAdmin> {
     return CustomGredCellViewAdmin(
       sText: posts[index].post,
       dFontSize: 20,
-
       imagen: posts[index].sUrlImg,
       iColorCode: 0,
       usuario: posts[index].usuario,
-      tituloPost:  posts[index].titulo, idPost: posts[index].id,
+      tituloPost: posts[index].titulo,
+      contenido: posts[index].post,
+      idPost: posts[index].id,
     );
   }
 

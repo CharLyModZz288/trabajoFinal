@@ -1,5 +1,3 @@
-
-
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,10 +13,16 @@ class EditarPostAdmin extends StatefulWidget {
   String? postId;
   String? usuario;
   String? imagen;
-  final String? tituloInicial; // Agregado
-  final String? contenidoInicial; // Agregado
+  final String? tituloInicial;
+  final String? contenidoInicial;
 
-  EditarPostAdmin({this.postId, this.usuario, this.imagen,this.tituloInicial,this.contenidoInicial});
+  EditarPostAdmin({
+    this.postId,
+    this.usuario,
+    this.imagen,
+    this.tituloInicial
+    ,this.contenidoInicial
+  });
 
   @override
   _EditarPostAdminState createState() => _EditarPostAdminState();
@@ -33,8 +37,8 @@ class _EditarPostAdminState extends State<EditarPostAdmin> {
   late FbPostId post;
   String userId = " ";
   String usuario = " ";
-  String titulo = " ";
-  String postContenido = " ";
+  String tituloInicial = " ";
+  String contenidoInicial = " ";
   String imagenUrl = " ";
   DataHolder conexion = DataHolder();
   bool _isDisposed = false;
@@ -131,8 +135,8 @@ class _EditarPostAdminState extends State<EditarPostAdmin> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Título: " + titulo),
-            Text("Contenido: " + postContenido),
+            Text("Título: " + _tituloController.text),
+            Text("Contenido: " + _contenidoController.text),
             SizedBox(height: 20),
             if (imagenUrl != " ")
               Image.network(
@@ -157,7 +161,7 @@ class _EditarPostAdminState extends State<EditarPostAdmin> {
                               TextField(
                                 onChanged: (value) {
                                   setState(() {
-                                    titulo = value;
+                                    tituloInicial = value;
                                   });
                                 },
                                 decoration: InputDecoration(labelText: 'Nuevo Título'),
@@ -165,7 +169,7 @@ class _EditarPostAdminState extends State<EditarPostAdmin> {
                               TextField(
                                 onChanged: (value) {
                                   setState(() {
-                                    postContenido = value;
+                                    contenidoInicial = value;
                                   });
                                 },
                                 decoration: InputDecoration(labelText: 'Nuevo Contenido'),
@@ -189,8 +193,8 @@ class _EditarPostAdminState extends State<EditarPostAdmin> {
                               onPressed: () {
                                 // Actualizar los datos en Firebase
                                 conexion.fbadmin.updatePostData(
-                                  titulo,
-                                  postContenido,
+                                  tituloInicial,
+                                  contenidoInicial,
                                   imagenUrl,
                                   widget.usuario.toString(),
                                   widget.postId.toString(),

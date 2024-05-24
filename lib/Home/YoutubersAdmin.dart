@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:trabajofinal/CustomViews/CustomDrawerAdmin.dart';
+import 'package:trabajofinal/CustomViews/CustomGredCellViewAdmin.dart';
 
 import '../CustomViews/CustomButton.dart';
 import '../CustomViews/CustomCellView.dart';
@@ -162,23 +163,50 @@ class _YoutubersAdminState extends State<YoutubersAdmin> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(title: Text("Youtubers"),
+      appBar: AppBar(title: Text("Youtube"),
         backgroundColor: Colors.rojoOscurotrabajo,),
       backgroundColor: Colors.black54,// Color de fondo del AppBar
       body: Center(
 
         child: celdasOLista(bIsList),
       ),
-      bottomNavigationBar: CustomButton(onBotonesClicked: this.onBottonMenuPressed, texto: 'Navegar',),
-      drawer: CustomDrawerAdmin2(onItemTap: fHomeViewDrawerOnTap, imagen: perfil.shint,),
-      floatingActionButton:FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed("/postcreateview2");
-        },
-        child: Icon(Icons.add),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              icon: Icon(Icons.list),
+              onPressed: () {
+                setState(() {
+                  bIsList = true;
+                });
+              },
+            ),
+            FloatingActionButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed("/postcreateview2");
+              },
+              child: Icon(Icons.add),
+              backgroundColor: Colors.amarillotrabajo,
+              elevation: 0,
+            ),
+            IconButton(
+              icon: Icon(Icons.grid_view),
+              onPressed: () {
+                setState(() {
+                  bIsList = false;
+                });
+              },
+            ),
+
+          ],
+        ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
-      /**/
+      drawer: CustomDrawerAdmin2(
+        onItemTap: fHomeViewDrawerOnTap,
+        imagen: perfil.shint,
+      ),
+
     );
   }
 
@@ -329,7 +357,7 @@ class _YoutubersAdminState extends State<YoutubersAdmin> {
 
 
   Widget? creadorDeItemMatriz(BuildContext context, int index) {
-    return CustomGredCellView(
+    return CustomGredCellViewAdmin(
       sText: posts[index].post,
       dFontSize: 20,
       contenido: posts[index].post,

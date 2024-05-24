@@ -15,6 +15,7 @@ import '../CustomViews/CustomDrawer.dart';
 import '../CustomViews/CustomDrawer2.dart';
 import '../CustomViews/CustomDrawerAdmin2.dart';
 import '../CustomViews/CustomGredCellView.dart';
+import '../CustomViews/CustomGredCellViewAdmin.dart';
 import '../FirebaseObjects/FbPostId.dart';
 import '../FirebaseObjects/FbUsuario.dart';
 import '../Singletone/DataHolder.dart';
@@ -162,23 +163,50 @@ class _StreamersAdminState extends State<StreamersAdmin> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(title: Text("Streamers"),
+      appBar: AppBar(title: Text("Twitch"),
         backgroundColor: Colors.rojoOscurotrabajo,),
       backgroundColor: Colors.black54,// Color de fondo del AppBar
       body: Center(
 
         child: celdasOLista(bIsList),
       ),
-      bottomNavigationBar: CustomButton(onBotonesClicked: this.onBottonMenuPressed, texto: 'Navegar',),
-      drawer: CustomDrawerAdmin2(onItemTap: fHomeViewDrawerOnTap, imagen: perfil.shint,),
-      floatingActionButton:FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed("/postcreateview4");
-        },
-        child: Icon(Icons.add),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              icon: Icon(Icons.list),
+              onPressed: () {
+                setState(() {
+                  bIsList = true;
+                });
+              },
+            ),
+            FloatingActionButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed("/postcreateview4");
+              },
+              child: Icon(Icons.add),
+              backgroundColor: Colors.amarillotrabajo,
+              elevation: 0,
+            ),
+            IconButton(
+              icon: Icon(Icons.grid_view),
+              onPressed: () {
+                setState(() {
+                  bIsList = false;
+                });
+              },
+            ),
+
+          ],
+        ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
-      /**/
+      drawer: CustomDrawerAdmin2(
+        onItemTap: fHomeViewDrawerOnTap,
+        imagen: perfil.shint,
+      ),
+
     );
   }
 
@@ -329,7 +357,7 @@ class _StreamersAdminState extends State<StreamersAdmin> {
 
 
   Widget? creadorDeItemMatriz(BuildContext context, int index) {
-    return CustomGredCellView(
+    return CustomGredCellViewAdmin(
       sText: posts[index].post,
       dFontSize: 20,
       contenido: posts[index].post,
