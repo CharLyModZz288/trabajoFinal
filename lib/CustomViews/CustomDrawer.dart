@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class CustomDrawer extends StatefulWidget {
   final Function(int indice) onItemTap;
@@ -16,23 +19,70 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   late String _currentImage;
   bool _isLocalImage = false;
+  String? _documentId;
 
   @override
   void initState() {
     super.initState();
     _currentImage = widget.imagen;
     _isLocalImage = Uri.parse(_currentImage).isScheme('file');
+    _loadCurrentImage();
+  }
+
+  Future<void> _loadCurrentImage() async {
+    // Cargar la imagen existente desde Firestore (asume que solo hay una imagen)
+    var snapshot = await FirebaseFirestore.instance.collection('images').limit(1).get();
+    if (snapshot.docs.isNotEmpty) {
+      var doc = snapshot.docs.first;
+      setState(() {
+        _currentImage = doc['url'];
+        _isLocalImage = false;
+        _documentId = doc.id; // Guarda el ID del documento
+      });
+    }
   }
 
   Future<void> _pickImage(ImageSource source) async {
     final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: source);
+    XFile? pickedImage = await _picker.pickImage(source: source);
 
-    if (image != null) {
-      setState(() {
-        _currentImage = image.path;
-        _isLocalImage = true;
-      });
+    if (pickedImage != null) {
+      File imageFile = File(pickedImage.path);
+
+      try {
+        // Subir la imagen a Firebase Storage
+        String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+        UploadTask uploadTask = FirebaseStorage.instance
+            .ref()
+            .child('images/$fileName')
+            .putFile(imageFile);
+
+        TaskSnapshot snapshot = await uploadTask;
+        String downloadUrl = await snapshot.ref.getDownloadURL();
+
+        // Actualizar la URL de la imagen en Firestore
+        if (_documentId != null) {
+          await FirebaseFirestore.instance.collection('images').doc(_documentId).update({
+            'url': downloadUrl,
+            'uploaded_at': Timestamp.now(),
+          });
+        } else {
+          DocumentReference docRef = await FirebaseFirestore.instance.collection('images').add({
+            'url': downloadUrl,
+            'uploaded_at': Timestamp.now(),
+          });
+          setState(() {
+            _documentId = docRef.id; // Guarda el ID del nuevo documento
+          });
+        }
+
+        setState(() {
+          _currentImage = downloadUrl;
+          _isLocalImage = false; // La imagen ahora está en línea
+        });
+      } catch (e) {
+        print('Error al subir la imagen: $e');
+      }
     }
   }
 
@@ -90,7 +140,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       width: MediaQuery.of(context).size.width * 1, // Ajusta este valor para controlar el ancho
-
       child: Container(
         color: Colors.white,
         child: ListView(

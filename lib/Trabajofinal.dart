@@ -23,10 +23,17 @@ import 'package:trabajofinal/onBoarding/PerfilView.dart';
 import 'package:trabajofinal/onBoarding/PhoneLoginView.dart';
 import 'package:trabajofinal/onBoarding/RegisterView.dart';
 import 'package:trabajofinal/splash/SplashView.dart';
+import 'package:trabajofinal/splash/SplashViewWeb.dart';
 
-import 'Home/ThemeView.dart';
+import 'Home/ThemeManager.dart';
 
-class MuseoYismer extends StatelessWidget {
+
+class MuseoYismer extends StatefulWidget {
+  @override
+  _MuseoYismerState createState() => _MuseoYismerState();
+}
+
+class _MuseoYismerState extends State<MuseoYismer> {
   @override
   Widget build(BuildContext context) {
     DataHolder().initPlatformAdmin(context);
@@ -57,22 +64,8 @@ class MuseoYismer extends StatelessWidget {
       '/favoritesview': (context) => FavoritesView(),
     };
 
-    // Si la aplicación se está ejecutando en la web.
-    if (kIsWeb) {
-      return MaterialApp(
-        title: "MUSEO YISMER (Web)",
-        initialRoute: '/splashview',
-        routes: {
-          ...rutasComunes,
-          '/homeadmin': (context) => HomeAdmin(),
-          '/youtubersadmin': (context) => YoutubersAdmin(),
-          '/influencersadmin': (context) => InfluencersAdmin(),
-          '/streamersadmin': (context) => StreamersAdmin(),
-        },
-      );
-    }
-
     return MaterialApp(
+      theme: ThemeManager.currentTheme, // Establece el tema globalmente
       title: "MUSEO YISMER (Móvil)",
       initialRoute: '/splashview',
       routes: rutasComunes,

@@ -72,7 +72,6 @@ class _HelpAndSupportViewState extends State<HelpAndSupportView> {
   }
 
   void _sendContactForm(BuildContext context) {
-    // Aquí podrías implementar la lógica para enviar el formulario de contacto o una api para que llegue al correo electrónico.
     _messageController.clear(); // Limpiar el campo de texto del mensaje
     showDialog(
       context: context,

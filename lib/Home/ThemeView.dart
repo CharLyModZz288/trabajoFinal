@@ -30,34 +30,13 @@ class _ThemeViewState extends State<ThemeView> {
                   _selectedThemeIndex = value as int;
                 });
 
-                _applyTheme(context, _selectedThemeIndex);
+                // Aplicar el nuevo tema seleccionado
+                ThemeManager.applyTheme(context, _selectedThemeIndex);
               },
             ),
           );
         },
       ),
     );
-  }
-
-  void _applyTheme(BuildContext context, int index) {
-    switch (index) {
-      case 0:
-        ThemeManager.currentTheme = ThemeData.light();
-        break;
-      case 1:
-        ThemeManager.currentTheme = ThemeData.dark();
-        break;
-      case 2:
-        ThemeManager.currentTheme =
-        MediaQuery.of(context).platformBrightness == Brightness.dark
-            ? ThemeData.light()
-            : ThemeData.dark();
-        break;
-      default:
-        ThemeManager.currentTheme = ThemeData.light();
-    }
-
-    // Forzar una reconstrucción de toda la aplicación
-    setState(() {});
   }
 }

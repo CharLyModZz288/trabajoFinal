@@ -14,7 +14,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(MyApp());
+  runApp(MuseoYismer());
 }
 
 class MyApp extends StatefulWidget {
