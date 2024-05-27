@@ -203,6 +203,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
             _buildCircularListTile('Resources/logout.jfif', 'Cerrar Sesión', () {
               widget.onItemTap(1);
             }),
+            /*_buildCircularListTile('Resources/logout.jfif', 'Mis Publicaciones', () {
+              widget.onItemTap(9);
+            }),*/
           ],
         ),
       ),

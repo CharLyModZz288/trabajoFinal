@@ -1,9 +1,9 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../CustomViews/CustomTextField.dart';
 import '../FirebaseObjects/FbPostId.dart';
@@ -22,13 +22,7 @@ class _PostCreateViewState extends State<PostCreateView> {
   late FbUsuario usuario;
   DataHolder conexion = DataHolder();
 
-  String id = ".";
-  String nombreUsuario = ".";
-
-  ImagePicker _picker = ImagePicker();
   File? _imagePreview;
-
-  String imgUrl = "";
 
   @override
   void initState() {
@@ -41,7 +35,8 @@ class _PostCreateViewState extends State<PostCreateView> {
   }
 
   Future<void> onGalleyClicked() async {
-    XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final picker = ImagePicker();
+    XFile? image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       setState(() {
         _imagePreview = File(image.path);
@@ -50,7 +45,8 @@ class _PostCreateViewState extends State<PostCreateView> {
   }
 
   Future<void> onCameraClicked() async {
-    XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    final picker = ImagePicker();
+    XFile? image = await picker.pickImage(source: ImageSource.camera);
     if (image != null) {
       setState(() {
         _imagePreview = File(image.path);
@@ -65,18 +61,12 @@ class _PostCreateViewState extends State<PostCreateView> {
 
     final storageRef = FirebaseStorage.instance.ref();
     String rutaEnNube = "posts/" + FirebaseAuth.instance.currentUser!.uid + "/imgs/" + DateTime.now().millisecondsSinceEpoch.toString() + ".jpg";
-    print("RUTA DONDE VA A GUARDARSE LA IMAGEN: " + rutaEnNube);
-
     final rutaAFicheroEnNube = storageRef.child(rutaEnNube);
     final metadata = SettableMetadata(contentType: "image/jpeg");
 
     try {
       await rutaAFicheroEnNube.putFile(_imagePreview!, metadata);
-      print("SE HA SUBIDO LA IMAGEN");
-
-      // Obtén la URL de la imagen después de subirla
       String url = await rutaAFicheroEnNube.getDownloadURL();
-      print("URL de la imagen: $url");
       return url;
     } on FirebaseException catch (e) {
       print("ERROR AL SUBIR IMAGEN: " + e.toString());
@@ -87,8 +77,7 @@ class _PostCreateViewState extends State<PostCreateView> {
   void subirElPost() async {
     conseguirUsuario();
 
-    // Setea la URL de la imagen
-    imgUrl = await setearUrlImagen();
+    String imgUrl = await setearUrlImagen();
 
     FbPostId postNuevo = FbPostId(
       post: tecPost.text,
@@ -118,9 +107,10 @@ class _PostCreateViewState extends State<PostCreateView> {
       appBar: AppBar(title: Text(DataHolder().sPublicar)),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              padding: EdgeInsets.all(8.0),
               child: customTextField(
                 tecUsername: tecTitulo,
                 oscuro: false,
@@ -128,7 +118,7 @@ class _PostCreateViewState extends State<PostCreateView> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              padding: EdgeInsets.all(8.0),
               child: customTextField(
                 tecUsername: tecPost,
                 oscuro: false,
@@ -137,29 +127,28 @@ class _PostCreateViewState extends State<PostCreateView> {
             ),
             if (_imagePreview != null)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Image.file(
                   _imagePreview!,
-                  width: 150, // Ajusta el ancho de la imagen según tus necesidades
-                  fit: BoxFit.cover, // Ajusta la imagen para que se adapte al tamaño especificado
+                  fit: BoxFit.cover,
                 ),
               ),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                TextButton(
-                  onPressed: onGalleyClicked,
-                  child: Text("Galería"),
-                ),
-                TextButton(
-                  onPressed: onCameraClicked,
-                  child: Text("Cámara"),
-                ),
-              ],
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: onGalleyClicked,
+                child: Text("Seleccionar desde Galería"),
+              ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.0),
+              padding: EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: onCameraClicked,
+                child: Text("Tomar una Foto"),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
               child: ElevatedButton(
                 onPressed: subirElPost,
                 child: Text("Subir"),

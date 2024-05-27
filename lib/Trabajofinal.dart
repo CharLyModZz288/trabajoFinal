@@ -17,6 +17,7 @@ import 'package:trabajofinal/Home/PostCreateView.dart';
 import 'package:trabajofinal/Home/PostCreateView2.dart';
 import 'package:trabajofinal/Home/PostCreateView3.dart';
 import 'package:trabajofinal/Home/PostCreateView4.dart';
+import 'package:trabajofinal/Home/myPhotosview.dart';
 import 'package:trabajofinal/Singletone/DataHolder.dart';
 import 'package:trabajofinal/onBoarding/LoginView.dart';
 import 'package:trabajofinal/onBoarding/PerfilView.dart';
@@ -62,6 +63,7 @@ class _MuseoYismerState extends State<MuseoYismer> {
       '/influencersadmin': (context) => InfluencersAdmin(),
       '/streamersadmin': (context) => StreamersAdmin(),
       '/favoritesview': (context) => FavoritesView(),
+      '/myphotosview': (context) => MyPhotosView(),
     };
 
     return MaterialApp(

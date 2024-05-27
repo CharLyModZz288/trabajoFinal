@@ -313,7 +313,10 @@ class _HomeViewState extends State<HomeView> {
       Navigator.of(context).pushNamed('/homeview4');
     } else if (indice == 8) {
       Navigator.of(context).pushNamed('/favoritesview');
-      }
+    }
+    else if (indice == 9) {
+      Navigator.of(context).pushNamed('/myphotosview');
+    }
       }
 
   Widget? creadorDeItemLista(BuildContext context, int index) {
