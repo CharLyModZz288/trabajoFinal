@@ -128,7 +128,7 @@ class _EditarPostAdminState extends State<EditarPostAdmin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(DataHolder().sNombre),
+        title: Text(DataHolder().sPublicar),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

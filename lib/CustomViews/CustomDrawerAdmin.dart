@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CustomDrawerAdmin extends StatelessWidget {
-  Function(int indice)? onItemTap;
-  String imagen;
+  final Function(int indice) onItemTap;
+  final String imagen;
 
   CustomDrawerAdmin({Key? key, required this.onItemTap, required this.imagen}) : super(key: key);
 
@@ -12,146 +12,99 @@ class CustomDrawerAdmin extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 1, // Ajusta este valor para controlar el ancho
       child: ListView(
         padding: EdgeInsets.zero,
-        children: [
+        children: <Widget>[
           DrawerHeader(
             decoration: BoxDecoration(
               color: Colors.black,
             ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    _showImageWithZoom(context);
-                  },
-                  child: Image.network(
-                    imagen,
-                    width: 100,
-                    height: 100,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      _showImageWithZoom(context);
+                    },
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.white,
+                      backgroundImage: NetworkImage(imagen),
+                    ),
                   ),
-                ),
-                // Espaciado entre la imagen y el texto
-                SizedBox(width: 12),
-                // Texto al lado de la imagen
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Bienvenido de nuevo jefe',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Bienvenido de nuevo jefe',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Text(
-                      '¿Que es lo que deseas añadir,',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),
-                    ),
-                    Text(
-                      'modificar o eliminar esta vez?',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                  SizedBox(height: 2),
+                ],
+              ),
             ),
           ),
-          // ListTile de elementos
-          ListTile(
-            leading: Image.asset(
-              'Resources/perfil.jfif',
-              width: 24.0,
-              height: 24.0,
-            ),
-            title: const Text('Perfil'),
-            onTap: () {
-              onItemTap!(0);
-            },
-          ),
-          ListTile(
-            leading: Image.asset(
-              'Resources/youtube.png',
-              width: 24.0,
-              height: 24.0,
-            ),
-            title: const Text('Youtube'),
-            onTap: () {
-              onItemTap!(5);
-            },
-          ),
-          ListTile(
-            leading: Image.asset(
-              'Resources/tik tok.png',
-              width: 24.0,
-              height: 24.0,
-            ),
-            title: const Text('TikTok'),
-            onTap: () {
-              onItemTap!(6);
-            },
-          ),
-          ListTile(
-            leading: Image.asset(
-              'Resources/twitch.jfif',
-              width: 24.0,
-              height: 24.0,
-            ),
+          _buildCircularListTile('Resources/perfil.jfif', 'Perfil', () {
+            onItemTap(0);
+          }),
+          _buildCircularListTile('Resources/youtube.png', 'Youtube', () {
+            onItemTap(5);
+          }),
+          _buildCircularListTile('Resources/tik tok.png', 'TikTok', () {
+            onItemTap(6);
+          }),
+          _buildCircularListTile('Resources/twitch.jfif', 'Twitch', () {
+            onItemTap(7);
+          }),
+          _buildCircularListTile('Resources/ajustes.png', 'Ajustes', () {
+            onItemTap(4);
+          }),
+          _buildCircularListTile('Resources/logout.jfif', 'Cerrar Sesión', () {
+            onItemTap(1);
+          }),
+        ],
+      ),
+    );
+  }
 
-            title: const Text('Twitch'),
-            onTap: () {
-              onItemTap!(7);
-            },
-          ),
-
-          ListTile(
-            leading: Image.asset(
-              'Resources/ajustes.png',
-              width: 24.0,
-              height: 24.0,
+  Widget _buildCircularListTile(String imagePath, String title, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            radius: 24,
+            backgroundColor: Colors.black,
+            child: CircleAvatar(
+              radius: 22,
+              backgroundColor: Colors.white,
+              backgroundImage: AssetImage(imagePath),
             ),
-            title: const Text('Ajustes'),
-            onTap: () {
-              onItemTap!(4);
-            },
           ),
-          ListTile(
-            leading: Image.asset(
-              'Resources/logout.jfif',
-              width: 24.0,
-              height: 24.0,
-            ),
-            selectedColor: Colors.red,
-            selected: true,
-            title: const Text('Cerrar Sesión'),
-            onTap: () {
-              onItemTap!(1);
-            },
+          SizedBox(height: 4),
+          Text(
+            title,
+            style: TextStyle(color: Colors.black),
           ),
         ],
       ),
     );
   }
+
   void _showImageWithZoom(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          backgroundColor: Colors.black54, // Opcional: haz el fondo transparente
+          backgroundColor: Colors.black54,
           child: InteractiveViewer(
-            // Habilita el zoom y la panorámica
-            panEnabled: false, // Desactiva la panorámica si quieres centrar la imagen
-            scaleEnabled: true, // Habilita el zoom
-            child: Image.network(
-              imagen, // Reemplaza esto con la ruta de la imagen que deseas mostrar con zoom
-            ),
+            panEnabled: false,
+            scaleEnabled: true,
+            child: Image.network(imagen),
           ),
         );
       },
