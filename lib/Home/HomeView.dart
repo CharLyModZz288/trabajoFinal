@@ -143,6 +143,14 @@ class _HomeViewState extends State<HomeView> {
       appBar: AppBar(
         title: Text("Publicaciones"),
         backgroundColor: Colors.amarillotrabajo,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.poll),
+            onPressed: () {
+              Navigator.of(context).pushNamed("/encuestasview");
+            },
+          ),
+        ],
       ),
       backgroundColor: Colors.grey[400], // Color de fondo del AppBar
       body: Center(
@@ -176,16 +184,13 @@ class _HomeViewState extends State<HomeView> {
                 });
               },
             ),
-
           ],
         ),
       ),
-
       drawer: CustomDrawer(
         onItemTap: fHomeViewDrawerOnTap,
         imagen: perfil.shint,
       ),
-
     );
   }
 
@@ -317,7 +322,7 @@ class _HomeViewState extends State<HomeView> {
     else if (indice == 9) {
       Navigator.of(context).pushNamed('/myphotosview');
     }
-      }
+  }
 
   Widget? creadorDeItemLista(BuildContext context, int index) {
     return CustomCellView(
@@ -374,4 +379,3 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 }
-

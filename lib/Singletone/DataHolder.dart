@@ -13,7 +13,7 @@ import 'PlatformAdmin.dart';
 class DataHolder {
   static final DataHolder _dataHolder = DataHolder._internal();
 
-  String sPublicar = "Publicar";
+  String sPublicar = "Publicación";
   String sNombre = "Trabajo Final de CarlosEscriva";
   FirebaseFirestore db = FirebaseFirestore.instance;
   FirebaseAdmin fbadmin = FirebaseAdmin();

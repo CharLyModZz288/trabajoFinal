@@ -27,6 +27,7 @@ import 'package:trabajofinal/splash/SplashView.dart';
 import 'package:trabajofinal/splash/SplashViewWeb.dart';
 
 import 'Home/ThemeManager.dart';
+import 'Home/encuestasview.dart';
 
 
 class MuseoYismer extends StatefulWidget {
@@ -42,6 +43,7 @@ class _MuseoYismerState extends State<MuseoYismer> {
     // Rutas comunes para ambas plataformas.
     Map<String, WidgetBuilder> rutasComunes = {
       '/splashview': (context) => SplashView(),
+      '/encuestasview': (context) => EncuestasView(),
       '/loginview': (context) => LoginView(),
       '/phoneloginview': (context) => PhoneLoginView(),
       '/registerview': (context) => RegisterView(),
