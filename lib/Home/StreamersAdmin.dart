@@ -387,7 +387,7 @@ class _StreamersAdminState extends State<StreamersAdmin> {
     } else {
       return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2),
+              crossAxisCount: 3),
           itemCount: posts.length,
           itemBuilder: creadorDeItemMatriz
       );

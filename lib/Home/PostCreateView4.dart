@@ -117,10 +117,12 @@ class _PostCreateViewState extends State<PostCreateView4> {
     DocumentReference<FbPostId> postDocRef = await postsRef.add(postNuevo);
 
     String postId = postDocRef.id;
-    print("El ID del nuevo post es: $postId");
+    print("E l ID del nuevo post es: $postId");
 
     postNuevo = postNuevo.copyWith(id: postId);
     await postDocRef.update(postNuevo.toFirestore());
+    Navigator.of(context).pushNamed('/streamersadmin');
+
   }
 
   @override

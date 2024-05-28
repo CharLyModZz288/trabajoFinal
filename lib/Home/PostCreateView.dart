@@ -99,6 +99,8 @@ class _PostCreateViewState extends State<PostCreateView> {
 
     postNuevo = postNuevo.copyWith(id: postId);
     await postDocRef.update(postNuevo.toFirestore());
+    Navigator.of(context).pushNamed('/homeview');
+
   }
 
   @override

@@ -121,6 +121,7 @@ class _PostCreateViewState extends State<PostCreateView2> {
 
     postNuevo = postNuevo.copyWith(id: postId);
     await postDocRef.update(postNuevo.toFirestore());
+    Navigator.of(context).pushNamed('/youtubersadmin');
   }
 
   @override

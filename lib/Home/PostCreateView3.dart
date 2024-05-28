@@ -112,6 +112,7 @@ class _PostCreateViewState extends State<PostCreateView3> {
         .withConverter(
       fromFirestore: FbPostId.fromFirestore,
       toFirestore: (FbPostId post, _) => post.toFirestore(),
+
     );
 
     DocumentReference<FbPostId> postDocRef = await postsRef.add(postNuevo);
@@ -121,6 +122,7 @@ class _PostCreateViewState extends State<PostCreateView3> {
 
     postNuevo = postNuevo.copyWith(id: postId);
     await postDocRef.update(postNuevo.toFirestore());
+    Navigator.of(context).pushNamed('/influencersadmin');
   }
 
   @override
