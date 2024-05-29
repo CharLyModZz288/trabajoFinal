@@ -7,7 +7,12 @@ import '../CustomViews/CustomDialog.dart';
 import '../CustomViews/CustomTextField.dart';
 import '../Singletone/DataHolder.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends StatefulWidget {
+  @override
+  _LoginViewState createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
   FirebaseFirestore db = FirebaseFirestore.instance;
   late BuildContext _context;
   DataHolder conexion = DataHolder();
@@ -15,12 +20,13 @@ class LoginView extends StatelessWidget {
   TextEditingController usuarioControlador = TextEditingController();
   TextEditingController usuarioPassword = TextEditingController();
 
+  bool _isTermsAccepted = false;
+
   void onClickTermsAndConditions(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Términos y condiciones'),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,7 +58,7 @@ class LoginView extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Todos los derechos de propiedad intelectual del contenido de esta aplicación son propiedad de [Nombre de la Empresa] y están protegidos por las leyes de derechos de autor. No se permite la reproducción o distribución no autorizada del contenido.',
+                  'Todos los derechos de propiedad intelectual del contenido de esta aplicación son propiedad de Museo Yismer y están protegidos por las leyes de derechos de autor. No se permite la reproducción o distribución no autorizada del contenido.',
                 ),
                 SizedBox(height: 10),
                 Text(
@@ -86,7 +92,6 @@ class LoginView extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Política de privacidad'),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,14 +165,16 @@ class LoginView extends StatelessWidget {
       CustomDialog.show(_context, "No está todo relleno, compruébalo");
       return;
     }
+    if (!_isTermsAccepted) {
+      CustomDialog.show(_context, "Debe aceptar los términos y condiciones y la política de privacidad");
+      return;
+    }
 
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: usuarioControlador.text,
         password: usuarioPassword.text,
       );
-
-        // Incrementa el contador de inicios de sesión
 
       if (credential.user?.email == 'administrador@administrador.com') {
         Navigator.of(_context).popAndPushNamed("/homeadmin");
@@ -244,6 +251,27 @@ class LoginView extends StatelessWidget {
                   CustomButton(
                     onPressed: () => onClickPrivacyPolicy(context),
                     texto: 'Políticas de privacidad',
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Checkbox(
+                    value: _isTermsAccepted,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        _isTermsAccepted = value ?? false;
+                      });
+                    },
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Acepto los términos y"),
+                      Text("condiciones y la política"),
+                      Text("de privacidad"),
+                    ],
                   ),
                 ],
               ),
