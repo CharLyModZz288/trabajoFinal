@@ -165,10 +165,6 @@ class _LoginViewState extends State<LoginView> {
       CustomDialog.show(_context, "No está todo relleno, compruébalo");
       return;
     }
-    if (!_isTermsAccepted) {
-      CustomDialog.show(_context, "Debe aceptar los términos y condiciones y la política de privacidad");
-      return;
-    }
 
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -179,6 +175,11 @@ class _LoginViewState extends State<LoginView> {
       if (credential.user?.email == 'administrador@administrador.com') {
         Navigator.of(_context).popAndPushNamed("/homeadmin");
       } else {
+        if (!_isTermsAccepted) {
+          CustomDialog.show(_context, "Debe aceptar los términos y condiciones y la política de privacidad");
+          return;
+        }
+
         if (await conexion.fbadmin.existenDatos()) {
           Navigator.of(_context).popAndPushNamed("/homeview");
         } else {
