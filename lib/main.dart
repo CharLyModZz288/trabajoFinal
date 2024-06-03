@@ -1,10 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:trabajofinal/Home/ThemeManager.dart'; // Importa el ThemeManager
-import 'package:trabajofinal/Home/ThemeView.dart'; // Importa el ThemeView
+import 'package:provider/provider.dart'; // Importa provider
+import 'Home/ThemeNotifier.dart';
 import 'Trabajofinal.dart';
 import 'firebase_options.dart';
 
@@ -14,7 +13,12 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(MuseoYismer());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeNotifier(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -38,6 +42,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+
     return MaterialApp(
       locale: _locale ?? Locale('es'), // Establece el idioma predeterminado a español
       localizationsDelegates: [
@@ -50,10 +56,9 @@ class _MyAppState extends State<MyApp> {
         const Locale('es'), // Español
         // Otros idiomas que desees soportar
       ],
-      theme: ThemeManager.currentTheme, // Establece el tema globalmente
+      themeMode: themeNotifier.themeMode,
       home: MuseoYismer(),
       routes: {
-        '/themeview': (context) => ThemeView(), // Agrega la ruta para ThemeView
       },
     );
   }

@@ -26,7 +26,6 @@ import 'package:trabajofinal/onBoarding/RegisterView.dart';
 import 'package:trabajofinal/splash/SplashView.dart';
 import 'package:trabajofinal/splash/SplashViewWeb.dart';
 
-import 'Home/ThemeManager.dart';
 import 'Home/encuestasview.dart';
 
 
@@ -69,8 +68,7 @@ class _MuseoYismerState extends State<MuseoYismer> {
     };
 
     return MaterialApp(
-      theme: ThemeManager.currentTheme, // Establece el tema globalmente
-      title: "MUSEO YISMER (Móvil)",
+      title: "MUSEO YISMER",
       initialRoute: '/splashview',
       routes: rutasComunes,
     );

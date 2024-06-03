@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'AboutView.dart';
 import 'HelpAndSupportView.dart';
-import 'LanguageView.dart';
 import 'SecuritySettingsView.dart';
-import 'ThemeView.dart';
 
 class AjustesView extends StatelessWidget {
   @override
@@ -22,15 +20,6 @@ class AjustesView extends StatelessWidget {
               // Acción al tocar la opción de notificaciones
             },
           ),
-          ListTile(
-            leading: Icon(Icons.language),
-            title: Text('Idioma'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LanguageView()),
-              );},
-          ),
 
           ListTile(
             leading: Icon(Icons.security),
@@ -41,16 +30,7 @@ class AjustesView extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => SecuritySettingsView()),
               );},
           ),
-          ListTile(
-            leading: Icon(Icons.brightness_6),
-            title: const Text('Cambiar Tema'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ThemeView()),
-              );
-            },
-          ),
+
 
 
           ListTile(

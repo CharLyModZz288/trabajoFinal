@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
 
 import '../CustomViews/CustomCellView.dart';
 import '../CustomViews/CustomDrawer.dart';
@@ -13,11 +14,11 @@ import '../FirebaseObjects/FbPostId.dart';
 import '../FirebaseObjects/FbUsuario.dart';
 import '../Singletone/DataHolder.dart';
 import '../onBoarding/LoginView.dart';
+import 'ThemeNotifier.dart';
 
 class HomeView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _HomeViewState();
   }
 }
@@ -40,7 +41,6 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     conseguirUsuario();
     descargarPosts();
@@ -138,7 +138,9 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Publicaciones"),
@@ -150,9 +152,24 @@ class _HomeViewState extends State<HomeView> {
               Navigator.of(context).pushNamed("/encuestasview");
             },
           ),
+          IconButton(
+            icon: Icon(Icons.lightbulb), // Icono para cambiar el tema
+            onPressed: () {
+              print("11111111111");
+              final themeNotifier = Provider.of<ThemeNotifier>(context, listen: false);
+              if (themeNotifier.themeMode == ThemeMode.light) {
+                print("222222");
+                themeNotifier.setTheme(ThemeMode.dark);
+              } else {
+                print("33333333");
+                themeNotifier.setTheme(ThemeMode.light);
+              }
+            },
+          ),
         ],
       ),
-      backgroundColor: Colors.grey[400], // Color de fondo del AppBar
+
+      backgroundColor: Colors.grey[400],
       body: Center(
         child: celdasOLista(bIsList),
       ),
@@ -262,7 +279,6 @@ class _HomeViewState extends State<HomeView> {
                                         Text('ID del Post: ${result['Idpost']}'),
                                         Text('Título: ${result['Titulo']}'),
                                         Text('Usuario: ${result['Usuario']}'),
-                                        // Agrega aquí otros campos que desees mostrar
                                       ],
                                     ),
                                 ],
@@ -318,8 +334,7 @@ class _HomeViewState extends State<HomeView> {
       Navigator.of(context).pushNamed('/homeview4');
     } else if (indice == 8) {
       Navigator.of(context).pushNamed('/favoritesview');
-    }
-    else if (indice == 9) {
+    } else if (indice == 9) {
       Navigator.of(context).pushNamed('/myphotosview');
     }
   }
@@ -371,7 +386,7 @@ class _HomeViewState extends State<HomeView> {
     } else {
       return GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
+          crossAxisCount: 4,
         ),
         itemCount: posts.length,
         itemBuilder: creadorDeItemMatriz,
