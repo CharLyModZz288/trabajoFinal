@@ -56,7 +56,6 @@ class _MyAppState extends State<MyApp> {
         const Locale('es'), // Español
         // Otros idiomas que desees soportar
       ],
-      themeMode: themeNotifier.themeMode,
       home: MuseoYismer(),
       routes: {
       },

@@ -138,9 +138,6 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final themeNotifier = Provider.of<ThemeNotifier>(context);
-    bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Publicaciones"),
@@ -157,13 +154,7 @@ class _HomeViewState extends State<HomeView> {
             onPressed: () {
               print("11111111111");
               final themeNotifier = Provider.of<ThemeNotifier>(context, listen: false);
-              if (themeNotifier.themeMode == ThemeMode.light) {
-                print("222222");
-                themeNotifier.setTheme(ThemeMode.dark);
-              } else {
-                print("33333333");
-                themeNotifier.setTheme(ThemeMode.light);
-              }
+              themeNotifier.toggleTheme();
             },
           ),
         ],

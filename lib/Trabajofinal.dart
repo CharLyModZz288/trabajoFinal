@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:trabajofinal/Home/AjustesView.dart';
 import 'package:trabajofinal/Home/FavoritesView.dart';
 import 'package:trabajofinal/Home/HomeAdmin.dart';
@@ -26,6 +27,7 @@ import 'package:trabajofinal/onBoarding/RegisterView.dart';
 import 'package:trabajofinal/splash/SplashView.dart';
 import 'package:trabajofinal/splash/SplashViewWeb.dart';
 
+import 'Home/ThemeNotifier.dart';
 import 'Home/encuestasview.dart';
 
 
@@ -34,7 +36,11 @@ class MuseoYismer extends StatefulWidget {
   _MuseoYismerState createState() => _MuseoYismerState();
 }
 
+
 class _MuseoYismerState extends State<MuseoYismer> {
+  late MaterialApp materialApp;
+
+
   @override
   Widget build(BuildContext context) {
     DataHolder().initPlatformAdmin(context);
@@ -67,10 +73,15 @@ class _MuseoYismerState extends State<MuseoYismer> {
       '/myphotosview': (context) => MyPhotosView(),
     };
 
-    return MaterialApp(
-      title: "MUSEO YISMER",
-      initialRoute: '/splashview',
-      routes: rutasComunes,
+    return Consumer<ThemeNotifier>(
+      builder: (context, themeNotifier, child) {
+        return MaterialApp(
+          title: "MUSEO YISMER",
+          initialRoute: '/splashview',
+          routes: rutasComunes,
+          theme:themeNotifier.themeData,
+        );
+      },
     );
   }
 }
