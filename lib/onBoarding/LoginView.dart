@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../CustomViews/CustomButton.dart';
 import '../CustomViews/CustomDialog.dart';
@@ -87,70 +88,21 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  void onClickPrivacyPolicy(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Política de Privacidad',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  '1. Información Recopilada:',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Recopilamos información personal como nombres, direcciones de correo electrónico y preferencias de usuario cuando los usuarios se registran en nuestra aplicación o realizan compras a través de ella. También recopilamos datos de uso, como la actividad del usuario y las interacciones con la aplicación.',
-                ),
-                SizedBox(height: 10),
-                Text(
-                  '2. Uso de la Información:',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Utilizamos la información recopilada para proporcionar y mejorar nuestros servicios, personalizar la experiencia del usuario y comunicarnos con los usuarios. No compartimos información personal con terceros sin el consentimiento del usuario, excepto cuando sea necesario para proporcionar servicios solicitados por el usuario.',
-                ),
-                SizedBox(height: 10),
-                Text(
-                  '3. Seguridad de los Datos:',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Implementamos medidas de seguridad para proteger la información personal de nuestros usuarios contra accesos no autorizados, alteraciones, divulgaciones o destrucciones no autorizadas. Sin embargo, no podemos garantizar la seguridad absoluta de la información transmitida a través de Internet.',
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cerrar'),
-            ),
-          ],
-        );
-      },
-    );
+
+  void onClickPrivacyPolicy(BuildContext context) async {
+    final Uri url = Uri.parse('https://charlymodzz288.github.io/politica-de-privacidad');
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+      print("object");
+    } else {
+      print("1111");
+      throw 'Could not launch $url';
+    }
   }
+
+
+
 
   void onClickRegistrar() {
     Navigator.of(_context).pushNamed("/registerview");
