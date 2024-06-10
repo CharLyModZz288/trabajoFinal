@@ -88,21 +88,9 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-
   void onClickPrivacyPolicy(BuildContext context) async {
-    final Uri url = Uri.parse('https://charlymodzz288.github.io/politica-de-privacidad');
-
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-      print("object");
-    } else {
-      print("1111");
-      throw 'Could not launch $url';
-    }
+    launch('https://charlymodzz288.github.io/politica-de-privacidad/');
   }
-
-
-
 
   void onClickRegistrar() {
     Navigator.of(_context).pushNamed("/registerview");

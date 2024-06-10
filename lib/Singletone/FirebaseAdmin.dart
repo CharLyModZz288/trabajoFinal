@@ -28,6 +28,21 @@ class FirebaseAdmin {
 
 
   }
+  Future<void> deletePostData(String postId) async {
+    try {
+      DocumentReference<Map<String, dynamic>> postRef = db.collection("PostUsuario").doc(postId);
+      DocumentSnapshot<Map<String, dynamic>> postSnapshot = await postRef.get();
+
+      if (postSnapshot.exists) {
+        await postRef.delete();
+        print("Publicación eliminada exitosamente");
+      } else {
+        print("No se encontró el documento con el ID proporcionado.");
+      }
+    } catch (e) {
+      print("Error al eliminar la publicación: $e");
+    }
+  }
 
 
   Future<void> anadirUsuario(String nombre, int edad, String img,Timestamp lastLoginDate) async {

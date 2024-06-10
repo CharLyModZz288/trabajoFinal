@@ -10,9 +10,9 @@ import '../FirebaseObjects/FbPostId.dart';
 import '../Singletone/DataHolder.dart';
 
 class EditarPostAdmin extends StatefulWidget {
-  String? postId;
-  String? usuario;
-  String? imagen;
+  final String? postId;
+  final String? usuario;
+  final String? imagen;
   final String? tituloInicial;
   final String? contenidoInicial;
 
@@ -20,8 +20,8 @@ class EditarPostAdmin extends StatefulWidget {
     this.postId,
     this.usuario,
     this.imagen,
-    this.tituloInicial
-    ,this.contenidoInicial
+    this.tituloInicial,
+    this.contenidoInicial,
   });
 
   @override
@@ -29,32 +29,28 @@ class EditarPostAdmin extends StatefulWidget {
 }
 
 class _EditarPostAdminState extends State<EditarPostAdmin> {
-  TextEditingController _tituloController = TextEditingController(); // Agregado
-  TextEditingController _contenidoController = TextEditingController(); // Agregado
+  TextEditingController _tituloController = TextEditingController();
+  TextEditingController _contenidoController = TextEditingController();
   ImagePicker _picker = ImagePicker();
   FirebaseFirestore db = FirebaseFirestore.instance;
   File _imagePreview = File("");
   late FbPostId post;
-  String userId = " ";
-  String usuario = " ";
-  String tituloInicial = " ";
-  String contenidoInicial = " ";
-  String imagenUrl = " ";
+  String imagenUrl = "";
   DataHolder conexion = DataHolder();
   bool _isDisposed = false;
 
   @override
   void initState() {
     super.initState();
-    _tituloController.text = widget.tituloInicial ?? ''; // Agregado
-    _contenidoController.text = widget.contenidoInicial ?? ''; // Agregado
-    imagenUrl = widget.imagen ?? ""; // Agregado
+    _tituloController.text = widget.tituloInicial ?? '';
+    _contenidoController.text = widget.contenidoInicial ?? '';
+    imagenUrl = widget.imagen ?? "";
   }
+
   @override
   void dispose() {
     _isDisposed = true;
     super.dispose();
-    print(widget.postId.toString()); // Use widget.postId here
   }
 
   Future<void> updateImage() async {
@@ -76,11 +72,8 @@ class _EditarPostAdminState extends State<EditarPostAdmin> {
     }
   }
 
-
   Future<void> updateImageCamera() async {
-
-    print("el usuario es:" + widget.postId.toString());
-    if (_isDisposed) return; // Verificar si el widget ha sido eliminado
+    if (_isDisposed) return;
 
     XFile? image = await _picker.pickImage(source: ImageSource.camera);
     if (image != null) {
@@ -104,7 +97,6 @@ class _EditarPostAdminState extends State<EditarPostAdmin> {
     String rutaEnNube =
         "posts/" + FirebaseAuth.instance.currentUser!.uid + "/imgs/" +
             DateTime.now().millisecondsSinceEpoch.toString() + ".jpg";
-    print("RUTA DONDE VA A GUARDARSE LA IMAGEN: " + rutaEnNube);
 
     final rutaAFicheroEnNube = storageRef.child(rutaEnNube);
 
@@ -112,10 +104,7 @@ class _EditarPostAdminState extends State<EditarPostAdmin> {
     try {
       await rutaAFicheroEnNube.putFile(_imagePreview, metadata);
 
-      print("SE HA SUBIDO LA IMAGEN");
-
       String url = await rutaAFicheroEnNube.getDownloadURL();
-      print("URL de la imagen: $url");
       return url;
     } on FirebaseException catch (e) {
       print("ERROR AL SUBIR IMAGEN: " + e.toString());
@@ -128,7 +117,45 @@ class _EditarPostAdminState extends State<EditarPostAdmin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(DataHolder().sPublicar),
+        title: Text('Editar Post'),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              // Mostrar un cuadro de diálogo de confirmación para borrar la publicación
+              bool confirmacion = await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Confirmar Eliminación'),
+                    content: Text('¿Estás seguro de que deseas eliminar esta publicación?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(false); // Cerrar el diálogo
+                        },
+                        child: Text('Cancelar'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(true); // Cerrar el diálogo
+                        },
+                        child: Text('Eliminar'),
+                      ),
+                    ],
+                  );
+                },
+              );
+
+              if (confirmacion == true) {
+                // Eliminar la publicación de la base de datos
+                await conexion.fbadmin.deletePostData(widget.postId.toString());
+                // Cerrar la pantalla actual
+                Navigator.of(context).pop();
+              }
+            },
+            icon: Icon(Icons.delete),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -149,7 +176,7 @@ class _EditarPostAdminState extends State<EditarPostAdmin> {
             Row(
               children: [
                 ElevatedButton(
-                  onPressed: ()  {
+                  onPressed: () {
                     // Mostrar un cuadro de diálogo para que el usuario ingrese nuevos datos
                     showDialog(
                       context: context,
@@ -161,7 +188,7 @@ class _EditarPostAdminState extends State<EditarPostAdmin> {
                               TextField(
                                 onChanged: (value) {
                                   setState(() {
-                                    tituloInicial = value;
+                                    _tituloController.text = value;
                                   });
                                 },
                                 decoration: InputDecoration(labelText: 'Nuevo Título'),
@@ -169,7 +196,7 @@ class _EditarPostAdminState extends State<EditarPostAdmin> {
                               TextField(
                                 onChanged: (value) {
                                   setState(() {
-                                    contenidoInicial = value;
+                                    _contenidoController.text = value;
                                   });
                                 },
                                 decoration: InputDecoration(labelText: 'Nuevo Contenido'),
@@ -178,23 +205,23 @@ class _EditarPostAdminState extends State<EditarPostAdmin> {
                                 onPressed: () async {
                                   await updateImageCamera();
                                 },
-                                child: Text('Seleccionar Imagen desde camera'),
+                                child: Text('Seleccionar Imagen desde cámara'),
                               ),
                               ElevatedButton(
                                 onPressed: () async {
                                   await updateImage();
                                 },
-                                child: Text('Foto desde galeria'),
+                                child: Text('Seleccionar Imagen desde galería'),
                               ),
                             ],
                           ),
                           actions: [
                             ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 // Actualizar los datos en Firebase
-                                conexion.fbadmin.updatePostData(
-                                  tituloInicial,
-                                  contenidoInicial,
+                                await conexion.fbadmin.updatePostData(
+                                  _tituloController.text,
+                                  _contenidoController.text,
                                   imagenUrl,
                                   widget.usuario.toString(),
                                   widget.postId.toString(),
@@ -213,7 +240,6 @@ class _EditarPostAdminState extends State<EditarPostAdmin> {
                   },
                   child: Text('Modificar Datos del Post'),
                 ),
-
               ],
             )
           ],
@@ -221,4 +247,4 @@ class _EditarPostAdminState extends State<EditarPostAdmin> {
       ),
     );
   }
-  }
+}

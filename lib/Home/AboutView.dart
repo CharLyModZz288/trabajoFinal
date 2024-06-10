@@ -24,7 +24,7 @@ class AboutView extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Text(
-              'Descripción de la aplicación. Esta aplicación hará que los adolescentes más jóvenes sientan curiosidad por visitar un museo, pero de manera diferente, ya que tendrá temas que interesen a la gran mayoría de la juventud, y próximamente tendremos su construcción futura.',
+              'Descripción de la aplicación. Esta aplicación hará que los adolescentes más jóvenes sientan curiosidad por visitar un museo, pero de manera diferente, ya que tendrá temas que interesen a la gran mayoría de la juventud.',
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 16),
