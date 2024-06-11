@@ -155,16 +155,6 @@ class _EditarPostState extends State<EditarPost> {
               ),
             ),
             SizedBox(height: 20),
-            Text(
-              "Descripción",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 4),
-            Text(
-              _contenidoController.text,
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(height: 20),
             if (imagenUrl != null && imagenUrl!.isNotEmpty)
               Image.network(
                 imagenUrl!,
@@ -173,6 +163,7 @@ class _EditarPostState extends State<EditarPost> {
                 fit: BoxFit.contain,
               ),
             SizedBox(height: 20),
+
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: db
@@ -185,29 +176,36 @@ class _EditarPostState extends State<EditarPost> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
                   }
-                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return Text(
-                      "Todavía no hay comentarios",
-                      style: TextStyle(fontSize: 16),
-                    );
-                  } else {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        final commentData = snapshot.data!.docs[index].data() as Map<String, dynamic>;
-                        return Card(
-                          margin: const EdgeInsets.symmetric(vertical: 8),
-                          child: ListTile(
-                            title: Text(
-                              commentData['usuario'],
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                  return ListView.builder(
+                    itemCount: snapshot.data!.docs.length + 1,
+                    itemBuilder: (context, index) {
+                      if (index == 0) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Card(
+                            child: ListTile(
+                              title: Text(
+                                "Descripción",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(_contenidoController.text),
                             ),
-                            subtitle: Text(commentData['texto']),
                           ),
                         );
-                      },
-                    );
-                  }
+                      }
+                      final commentData = snapshot.data!.docs[index - 1].data() as Map<String, dynamic>;
+                      return Card(
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        child: ListTile(
+                          title: Text(
+                            commentData['usuario'],
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Text(commentData['texto']),
+                        ),
+                      );
+                    },
+                  );
                 },
               ),
             ),
