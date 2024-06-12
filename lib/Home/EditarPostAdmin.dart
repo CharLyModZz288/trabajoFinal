@@ -116,135 +116,136 @@ class _EditarPostAdminState extends State<EditarPostAdmin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+        appBar: AppBar(
         title: Text('Editar Post'),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              // Mostrar un cuadro de diálogo de confirmación para borrar la publicación
-              bool confirmacion = await showDialog(
+    actions: [
+    IconButton(
+    onPressed: () async {
+    // Mostrar un cuadro de diálogo de confirmación para borrar la publicación
+    bool confirmacion = await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+    return AlertDialog(
+    title: Text('Confirmar Eliminación'),
+    content: Text('¿Estás seguro de que deseas eliminar esta publicación?'),
+    actions: [
+    TextButton(
+    onPressed: () {
+    Navigator.of(context).pop(false); // Cerrar el diálogo
+    },
+    child: Text('Cancelar'),
+    ),
+    TextButton(
+    onPressed: () {
+    Navigator.of(context).pop(true); // Cerrar el diálogo
+    },
+    child: Text('Eliminar'),
+    ),
+    ],
+    );
+    },
+    );
+
+    if (confirmacion == true) {
+    // Eliminar la publicación de la base de datos
+    await conexion.fbadmin.deletePostData(widget.postId.toString());
+    // Cerrar la pantalla actual
+    Navigator.of(context).pop();
+    }
+    },
+    icon: Icon(Icons.delete),
+    ),
+    ],
+    ),
+    body: Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+    Text("Título: " + _tituloController.text),
+    Text("Contenido: " + _contenidoController.text),
+    SizedBox(height: 20),
+    if (imagenUrl != " ")
+    Image.network(
+    imagenUrl,
+    width:
+    double.infinity,
+      height: 200,
+      fit: BoxFit.contain,
+    ),
+      SizedBox(height: 20),
+      Row(
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              // Mostrar un cuadro de diálogo para que el usuario ingrese nuevos datos
+              showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Confirmar Eliminación'),
-                    content: Text('¿Estás seguro de que deseas eliminar esta publicación?'),
+                    title: Text('Modificar Datos del Post'),
+                    content: Column(
+                      children: [
+                        TextField(
+                          onChanged: (value) {
+                            setState(() {
+                              _tituloController.text = value;
+                            });
+                          },
+                          decoration: InputDecoration(labelText: 'Nuevo Título'),
+                        ),
+                        TextField(
+                          onChanged: (value) {
+                            setState(() {
+                              _contenidoController.text = value;
+                            });
+                          },
+                          decoration: InputDecoration(labelText: 'Nuevo Contenido'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            await updateImageCamera();
+                          },
+                          child: Text('Seleccionar Imagen desde cámara'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            await updateImage();
+                          },
+                          child: Text('Seleccionar Imagen desde galería'),
+                        ),
+                      ],
+                    ),
                     actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(false); // Cerrar el diálogo
+                      ElevatedButton(
+                        onPressed: () async {
+                          // Actualizar los datos en Firebase
+                          await conexion.fbadmin.updatePostData(
+                            _tituloController.text,
+                            _contenidoController.text,
+                            imagenUrl,
+                            widget.usuario.toString(),
+                            widget.postId.toString(),
+                          );
+                          // Cerrar el diálogo
+                          Navigator.of(context).pop();
+                          // Actualizar el estado para reflejar los cambios
+                          setState(() {});
                         },
-                        child: Text('Cancelar'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(true); // Cerrar el diálogo
-                        },
-                        child: Text('Eliminar'),
+                        child: Text('Guardar Cambios'),
                       ),
                     ],
                   );
                 },
               );
-
-              if (confirmacion == true) {
-                // Eliminar la publicación de la base de datos
-                await conexion.fbadmin.deletePostData(widget.postId.toString());
-                // Cerrar la pantalla actual
-                Navigator.of(context).pop();
-              }
             },
-            icon: Icon(Icons.delete),
+            child: Text('Modificar Datos del Post'),
           ),
         ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Título: " + _tituloController.text),
-            Text("Contenido: " + _contenidoController.text),
-            SizedBox(height: 20),
-            if (imagenUrl != " ")
-              Image.network(
-                imagenUrl,
-                width: double.infinity,
-                height: 200,
-                fit: BoxFit.contain,
-              ),
-            SizedBox(height: 20),
-            Row(
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Mostrar un cuadro de diálogo para que el usuario ingrese nuevos datos
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('Modificar Datos del Post'),
-                          content: Column(
-                            children: [
-                              TextField(
-                                onChanged: (value) {
-                                  setState(() {
-                                    _tituloController.text = value;
-                                  });
-                                },
-                                decoration: InputDecoration(labelText: 'Nuevo Título'),
-                              ),
-                              TextField(
-                                onChanged: (value) {
-                                  setState(() {
-                                    _contenidoController.text = value;
-                                  });
-                                },
-                                decoration: InputDecoration(labelText: 'Nuevo Contenido'),
-                              ),
-                              ElevatedButton(
-                                onPressed: () async {
-                                  await updateImageCamera();
-                                },
-                                child: Text('Seleccionar Imagen desde cámara'),
-                              ),
-                              ElevatedButton(
-                                onPressed: () async {
-                                  await updateImage();
-                                },
-                                child: Text('Seleccionar Imagen desde galería'),
-                              ),
-                            ],
-                          ),
-                          actions: [
-                            ElevatedButton(
-                              onPressed: () async {
-                                // Actualizar los datos en Firebase
-                                await conexion.fbadmin.updatePostData(
-                                  _tituloController.text,
-                                  _contenidoController.text,
-                                  imagenUrl,
-                                  widget.usuario.toString(),
-                                  widget.postId.toString(),
-                                );
-                                // Cerrar el diálogo
-                                Navigator.of(context).pop();
-                                // Actualizar el estado para reflejar los cambios
-                                setState(() {});
-                              },
-                              child: Text('Guardar Cambios'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  child: Text('Modificar Datos del Post'),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
+      )
+    ],
+    ),
+    ),
     );
   }
 }

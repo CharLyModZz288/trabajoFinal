@@ -134,36 +134,62 @@ class _EditarPostState extends State<EditarPost> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Título:",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 4),
-            Text(
-              _tituloController.text,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.deepPurple,
-                shadows: [
-                  Shadow(
-                    blurRadius: 10.0,
-                    color: Colors.black.withOpacity(0.5),
-                    offset: Offset(2.0, 2.0),
+            Center(
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.blue, Colors.green],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                ],
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.5),
+                      blurRadius: 10,
+                      offset: Offset(2, 2),
+                    ),
+                  ],
+                ),
+                child: Text(
+                  _tituloController.text,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 10.0,
+                        color: Colors.black.withOpacity(0.5),
+                        offset: Offset(2.0, 2.0),
+                      ),
+                    ],
+                    letterSpacing: 1.5,
+                    wordSpacing: 2.0,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
             SizedBox(height: 20),
             if (imagenUrl != null && imagenUrl!.isNotEmpty)
-              Image.network(
-                imagenUrl!,
-                width: double.infinity,
-                height: 200,
-                fit: BoxFit.contain,
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 8,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(
+                    imagenUrl!,
+                    width: double.infinity,
+                    height: 400,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             SizedBox(height: 20),
-
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: db

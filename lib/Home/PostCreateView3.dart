@@ -81,7 +81,7 @@ class _PostCreateViewState extends State<PostCreateView3> {
       await rutaAFicheroEnNube.putFile(_imagePreview, metadata);
 
       print("SE HA SUBIDO LA IMAGEN");
-      Navigator.of(context).popAndPushNamed("/homeview3");
+      Navigator.of(context).popAndPushNamed("/influencersadmin");
       // Obtén la URL de la imagen después de subirla
       String url = await rutaAFicheroEnNube.getDownloadURL();
       print("URL de la imagen: $url");
